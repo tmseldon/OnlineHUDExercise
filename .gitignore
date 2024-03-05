@@ -76,5 +76,6 @@ DerivedDataCache/*
 # Assets Packages
 Content/Characters/*
 Content/ThirdPerson/*
+Content/Fonts/*
 Content/__ExternalActors__/*
 Content/__ExternalObjects__/*
