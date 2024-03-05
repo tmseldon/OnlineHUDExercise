@@ -1,0 +1,18 @@
+{"InitialPlayersData": [
+	{
+		"Name": "Cris",
+		"Alias": "cchong",
+		"Level": 5,
+		"Pic": 2,
+		"LastSeen": 1709513459,
+		"Online": true
+	},
+	{
+		"Name": "Sally",
+		"Alias": "salY",
+		"Level": 12,
+		"Pic": 1,
+		"LastSeen": 1709513459,
+		"Online": false
+	}
+]}
