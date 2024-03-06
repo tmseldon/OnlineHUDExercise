@@ -34,6 +34,6 @@ public:
 	FText GetAliasField() const;
 	FText GetOnlineField() const;
 	
-
+	void TestingMethod();
 	
 };

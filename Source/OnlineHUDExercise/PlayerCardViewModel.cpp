@@ -41,3 +41,8 @@ void UPlayerCardViewModel::SetOnlineField(FText NewText)
         UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(OnlineField);
     }
 }
+
+void UPlayerCardViewModel::TestingMethod()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Method call from through viewmodel"));
+}
