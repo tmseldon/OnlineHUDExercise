@@ -61,5 +61,9 @@ class ONLINEHUDEXERCISE_API AGameModeExtended : public AGameModeBase
 protected:
 
 	virtual void BeginPlay() override;
+
+public:
+
+	AGameModeExtended();
 	
 };
