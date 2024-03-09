@@ -2,6 +2,9 @@
 
 
 #include "PlayerCardViewModel.h"
+#include "JsonDataPlayer.h"
+//#include "StructUtils.h"
+#include "GameModeExtended.h"
 
 FText UPlayerCardViewModel::GetNameField() const
 {
@@ -45,4 +48,13 @@ void UPlayerCardViewModel::SetOnlineField(FText NewText)
 void UPlayerCardViewModel::TestingMethod()
 {
     UE_LOG(LogTemp, Warning, TEXT("Method call from through viewmodel"));
+}
+
+void UPlayerCardViewModel::NativeOnListItemObjectSet(UObject* ListItemObject)
+{
+    if (UEncapsulateData* dataCard = Cast<UEncapsulateData>(ListItemObject))
+    {
+        SetNameField(FText::FromString(dataCard->Nombre));
+        SetAliasField(FText::FromString(dataCard->Alias));
+    }
 }

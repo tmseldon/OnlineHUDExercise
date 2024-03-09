@@ -17,10 +17,22 @@ class ONLINEHUDEXERCISE_API AHUDController : public AHUD
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
+	int NumberPlayerCardVMOnPool = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> OnlineScreenWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> PlayerCardWidget;
+
+	// Reference for the Player Controller
+	APlayerController* CharacterController;
+
+	// Pool of PlayerCard sidgets that we will use for each player
+	TArray<class UUserWidget*> ListSpawnedPlayerCardsWidgets;
+
+	// Method to create the Object Pool of Player Card View Models
+	void CreatePlayerCardPool();
 
 protected:
 	// Called when the game starts or when spawned

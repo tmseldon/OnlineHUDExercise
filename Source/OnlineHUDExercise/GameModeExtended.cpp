@@ -2,6 +2,7 @@
 
 
 #include "GameModeExtended.h"
+#include "JsonDataPlayer.h"
 #include "JsonObjectConverter.h"
 #include "OnlineHUDExerciseCharacter.h"
 #include "UObject/ConstructorHelpers.h"
@@ -39,7 +40,7 @@ void AGameModeExtended::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *FileData);
 
 
-	if (FJsonObjectConverter::JsonObjectStringToUStruct(FileData, &ListPlayerData, 0, 0))
+	if (FJsonObjectConverter::JsonObjectStringToUStruct(FileData, &DataCardInitial, 0, 0))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CONVERTED"));
 		UE_LOG(LogTemp, Warning, TEXT("First Name: %s Level: %d Alias: %s"), *ListPlayerData.InitialPlayersData[0].Name,

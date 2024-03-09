@@ -3,14 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InstancedStruct.h"
 #include "MVVMViewModelBase.h"
+#include "Blueprint/IUserObjectListEntry.h"
 #include "PlayerCardViewModel.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase
+class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase, public IUserObjectListEntry
 {
 	GENERATED_BODY()
 
@@ -27,6 +29,12 @@ protected:
 	void SetNameField(FText NewText);
 	void SetAliasField(FText NewText);
 	void SetOnlineField(FText NewText);
+
+	// IUserObjectListEntry
+	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+
+	UPROPERTY(EditAnywhere, meta = (BaseStruct = "FJsonDataPlayer"))
+	FInstancedStruct DataCard;
 
 public:
 
