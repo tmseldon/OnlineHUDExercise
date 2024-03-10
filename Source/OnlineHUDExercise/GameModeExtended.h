@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InstancedStruct.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameModeExtended.generated.h"
 
@@ -14,7 +13,10 @@ class ONLINEHUDEXERCISE_API UEncapsulateData : public UObject
 
 public:
 
+	UPROPERTY()
 	FString Nombre;
+
+	UPROPERTY()
 	FString Alias;
 };
 
@@ -32,11 +34,13 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, meta = (BaseStruct = "FJsonInitialPlayers"))
-	FInstancedStruct DataCardInitial;
+	UPROPERTY(BlueprintReadWrite)
+	UEncapsulateData* InitialPlayersInfo;
 
 public:
 
 	AGameModeExtended();
+
+	TArray<UEncapsulateData*> DataTestEncapsulated;
 	
 };

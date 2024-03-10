@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InstancedStruct.h"
 #include "MVVMViewModelBase.h"
 #include "Blueprint/IUserObjectListEntry.h"
 #include "PlayerCardViewModel.generated.h"
@@ -32,9 +31,6 @@ protected:
 
 	// IUserObjectListEntry
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
-
-	UPROPERTY(EditAnywhere, meta = (BaseStruct = "FJsonDataPlayer"))
-	FInstancedStruct DataCard;
 
 public:
 

@@ -52,8 +52,12 @@ void UPlayerCardViewModel::TestingMethod()
 
 void UPlayerCardViewModel::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
+    UE_LOG(LogTemp, Warning, TEXT("aqui setting the elements on thje list"));
+
     if (UEncapsulateData* dataCard = Cast<UEncapsulateData>(ListItemObject))
     {
+        UE_LOG(LogTemp, Warning, TEXT("Method call from through viewmodel %s, %s"), *dataCard->Nombre, *dataCard->Alias);
+
         SetNameField(FText::FromString(dataCard->Nombre));
         SetAliasField(FText::FromString(dataCard->Alias));
     }
