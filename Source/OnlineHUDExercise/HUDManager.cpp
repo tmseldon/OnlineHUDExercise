@@ -5,6 +5,7 @@
 #include "PlayerCardViewModel.h"
 #include "MVVMSubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "View/MVVMView.h" 
 
 void AHUDManager::BeginPlay()
 {
@@ -29,6 +30,14 @@ void AHUDManager::BeginPlay()
 	if (WidgetSpawned)
 	{
 		WidgetSpawned->AddToViewport();
+	}
+
+	if (UMVVMView* ViewModelTest = UMVVMSubsystem::GetViewFromUserWidget(WidgetSpawned))
+	{
+		UPlayerCardViewModel* NewVM = NewObject<UPlayerCardViewModel>();
+		NewVM->SetNameField(FText::FromString(TEXT("Seteado desde afuera manualemnte")));
+
+		ViewModelTest->SetViewModel(FName(TEXT("PlayerCardViewModel")), NewVM);
 	}
 	
 	
@@ -77,6 +86,14 @@ void AHUDManager::CreatePlayerCardPool()
 			//PlayerVM->TestingMethod();
 		}
 	}
+
+	//if (UMVVMView* ViewModelTest = UMVVMSubsystem::GetViewFromUserWidget(ListSpawnedPlayerCardsWidgets[0]))
+	//{
+	//	UPlayerCardViewModel* NewVM = NewObject<UPlayerCardViewModel>();
+	//	NewVM->SetNameField(FText::FromString(TEXT("Seteado desde afuera manualemnte")));
+
+	//	ViewModelTest->SetViewModel(FName(TEXT("PlayerCardViewModel")), NewVM);
+	//}
 
 
 }

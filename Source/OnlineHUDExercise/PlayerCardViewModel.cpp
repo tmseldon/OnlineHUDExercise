@@ -51,6 +51,7 @@ void UPlayerCardViewModel::TestingMethod()
 
 UPlayerCardViewModel::UPlayerCardViewModel()
 {
-    SetAliasField(FText::FromString(TEXT("prueba constructor")));
-    UPlayerCardViewModel* ViewModelPointer = this;
+    //SetAliasField(FText::FromString(TEXT("prueba constructor")));
+    //UPlayerCardViewModel* ViewModelPointer = this;
+    UE_LOG(LogTemp, Warning, TEXT("Estoy en el constructor del VM "));
 }

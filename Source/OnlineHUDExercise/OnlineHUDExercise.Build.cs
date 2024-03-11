@@ -17,7 +17,8 @@ public class OnlineHUDExercise : ModuleRules
 			"UMG", 
 			"Json", 
 			"JsonUtilities", 
-			"StructUtils", 
-		});
+			"StructUtils",
+            "FieldNotification",
+        });
     }
 }
