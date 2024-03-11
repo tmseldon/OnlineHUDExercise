@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "HUDController.generated.h"
+#include "HUDManager.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ONLINEHUDEXERCISE_API AHUDController : public AHUD
+class ONLINEHUDEXERCISE_API AHUDManager : public AHUD
 {
 	GENERATED_BODY()
 	

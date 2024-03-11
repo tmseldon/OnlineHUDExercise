@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HUDController.h"
+#include "HUDManager.h"
 #include "PlayerCardViewModel.h"
-//#include "MVVMSubsystem.h"
+#include "MVVMSubsystem.h"
 #include "Blueprint/UserWidget.h"
 
-void AHUDController::BeginPlay()
+void AHUDManager::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -18,17 +18,24 @@ void AHUDController::BeginPlay()
 	{
 		UE_LOG(LogTemp, 
 			Warning, 
-			TEXT("Something went bad at init on HUDController; OnlineScreenWidget: %s, PlayerCardWidget: %s"),
+			TEXT("Something went bad at init on HUDManager; OnlineScreenWidget: %s, PlayerCardWidget: %s"),
 			OnlineScreenWidget == nullptr ? TEXT("NULL") : TEXT("INIT"),
 			PlayerCardWidget == nullptr ? TEXT("NULL") : TEXT("INIT")
 			);
 		return;
 	}
 
-	CreatePlayerCardPool();
+	UUserWidget* WidgetSpawned = CreateWidget(CharacterController, TSubclassOf<class UUserWidget>(PlayerCardWidget), FName(TEXT("PlayerCard")));
+	if (WidgetSpawned)
+	{
+		WidgetSpawned->AddToViewport();
+	}
+	
+	
+	//CreatePlayerCardPool();
 }
 
-void AHUDController::CreatePlayerCardPool()
+void AHUDManager::CreatePlayerCardPool()
 {
 	for (int IndexPlayerCard = 0; IndexPlayerCard < NumberPlayerCardVMOnPool; IndexPlayerCard++)
 	{
@@ -40,29 +47,36 @@ void AHUDController::CreatePlayerCardPool()
 			ListSpawnedPlayerCardsWidgets.Add(WidgetSpawned);
 
 				UE_LOG(LogTemp,
-			Warning,
-			TEXT("Here at creation %s"),
+					Warning,
+					TEXT("Here at creation %s"),
 					*WidgetSpawned->GetName()
 		);
+
+			
+
 
 			//UPlayerCardViewModel* PlayerVM = Cast<class UPlayerCardViewModel>(WidgetSpawned);
 			//
 			//if (PlayerVM)
 			//{
-			//	ListSpawnedPlayerCardsVM.Add(PlayerVM);
+			//	/*ListSpawnedPlayerCardsVM.Add(PlayerVM);*/
 
 			//	UE_LOG(LogTemp,
 			//		Warning,
 			//		TEXT("Here at creation")
 			//	);
+
+			//	
 			//}
 
 			//UE_LOG(LogTemp,Warning, TEXT("Here at creation where VM: %s"),
 			//	PlayerVM != nullptr ? TEXT("VM not null") : TEXT("it is null")
 			//);
 
+			//
 			//PlayerVM->TestingMethod();
-			
 		}
 	}
+
+
 }

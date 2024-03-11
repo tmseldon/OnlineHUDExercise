@@ -14,8 +14,8 @@ void UTestingPrototypeWidget::NativeConstruct()
 
 	if (GameExtended)
 	{
-		TArray<UEncapsulateData*> ItemsList = GameExtended->DataTestEncapsulated;
-		ListTest->SetListItems(ItemsList);
+		//TArray<UEncapsulateData*> ItemsList = GameExtended->DataTestEncapsulated;
+		//ListTest->SetListItems(ItemsList);
 	}
 
 }

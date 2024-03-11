@@ -6,20 +6,19 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameModeExtended.generated.h"
 
-UCLASS()
-class ONLINEHUDEXERCISE_API UEncapsulateData : public UObject
-{
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY()
-	FString Nombre;
-
-	UPROPERTY()
-	FString Alias;
-};
-
+//UCLASS()
+//class ONLINEHUDEXERCISE_API UEncapsulateData : public UObject
+//{
+//	GENERATED_BODY()
+//
+//public:
+//
+//	UPROPERTY()
+//	FString Nombre;
+//
+//	UPROPERTY()
+//	FString Alias;
+//};
 
 
 /**
@@ -34,13 +33,15 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadWrite)
-	UEncapsulateData* InitialPlayersInfo;
+	//UPROPERTY(BlueprintReadWrite)
+	//UEncapsulateData* InitialPlayersInfo;
+
+	
 
 public:
 
 	AGameModeExtended();
 
-	TArray<UEncapsulateData*> DataTestEncapsulated;
+	//TArray<UEncapsulateData*> DataTestEncapsulated;
 	
 };
