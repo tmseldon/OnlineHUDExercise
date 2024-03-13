@@ -38,6 +38,9 @@ void AHUDManager::BeginPlay()
 		NewVM->SetNameField(FText::FromString(TEXT("Seteado desde afuera manualemnte")));
 
 		ViewModelTest->SetViewModel(FName(TEXT("PlayerCardViewModel")), NewVM);
+		
+		/* Probar este para el caso de que se instnacie de forma automática*/
+		TScriptInterface<INotifyFieldValueChanged> VM = ViewModelTest->GetViewModel(FName(TEXT("PlayerCardViewModel")));
 	}
 	
 	
