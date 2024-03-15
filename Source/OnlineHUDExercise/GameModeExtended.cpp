@@ -84,16 +84,13 @@ void AGameModeExtended::CreateInitialModel()
 	{
 		TArray<FPlayerProfileData*> AllRowsInfo;
 		InitialPlayersStatus->GetAllRows(FString(TEXT("InitialData")), AllRowsInfo);
-		int TotalElements = AllRowsInfo.Num();
 
-		for (int Index = 0; Index < TotalElements; Index++)
+		for (FPlayerProfileData* PlayerData : AllRowsInfo)
 		{
-			FPlayerProfileData ValueData = *AllRowsInfo[Index];
-
 			UEncapsulatePlayerData* DataEncapsulated = NewObject<UEncapsulatePlayerData>();
-			DataEncapsulated->HydratePlayerDataModel(ValueData);
+			DataEncapsulated->HydratePlayerDataModel(*PlayerData);
 
-			if (ValueData.bIsOnline)
+			if (PlayerData->bIsOnline)
 			{
 				PlayersOnline.Add(DataEncapsulated);
 			}
@@ -118,34 +115,30 @@ void AGameModeExtended::StartStatusChangeSimulation()
 	// We determine if we change someone from Offline (0) or Online (1)
 	int ChangeStatus = FMath::RandRange(0, 1);
 
+	// Changed information to send on the event
 	FString UserChanged;
-	bool bChangedStatus;
+	bool bChangedStatus = false;
+	int ChangeStatusPlayerIndex = -1;
 
-	int ChangeStatusPlayerIndex;
-
+	//Case changing someone from Offline to Online
 	if (ChangeStatus == 0)
 	{
-		int PlayerOfflineTotal = PlayersOffline.Num() - 1;
-
-		if (PlayerOfflineTotal >= 0)
+		if (PlayersOffline.Num() > 0)
 		{
-			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayerOfflineTotal);
+			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOffline.Num() - 1);
 			PlayersOffline[ChangeStatusPlayerIndex]->bIsOnline = true;
 
-			// Debugging
 			UserChanged = PlayersOffline[ChangeStatusPlayerIndex]->Nickname.ToString();
 			bChangedStatus = PlayersOffline[ChangeStatusPlayerIndex]->bIsOnline;
-			UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
-				*UserChanged, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
-			//UEncapsulatePlayerData* DataEncapsulated = NewObject<UEncapsulatePlayerData>();
-			//DataEncapsulated->HydratePlayerDataModel(*PlayersOffline[ChangeStatusPlayerIndex], true);
-
-			//PlayersOnline.Add(DataEncapsulated);
+			//// Debugging
+			//UE_LOG(LogTemp, Warning, TEXT("*****************"));
+			//UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
+			//	*UserChanged, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOnline.Add(PlayersOffline[ChangeStatusPlayerIndex]);
 
-			if (PlayerOfflineTotal > 0)
+			if (PlayersOffline.Num() > 1)
 			{
 				PlayersOffline.RemoveAt(ChangeStatusPlayerIndex);
 			}
@@ -153,33 +146,28 @@ void AGameModeExtended::StartStatusChangeSimulation()
 			{
 				PlayersOffline.Reset();
 			}
-			
 		}
 	}
+
+	//Case changing someone from Online to Offline
 	else
 	{
-		int PlayersOnlineTotal = PlayersOnline.Num() - 1;
-
-		if (PlayersOnlineTotal >= 0)
+		if (PlayersOnline.Num() >= 0)
 		{
-			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOnlineTotal);
+			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOnline.Num() - 1);
 			PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline = false;
 
-			// Debugging
 			UserChanged = PlayersOnline[ChangeStatusPlayerIndex]->Nickname.ToString();
 			bChangedStatus = PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline;
-			UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
-				*UserChanged, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
-
-			//UEncapsulatePlayerData* DataEncapsulated = NewObject<UEncapsulatePlayerData>();
-			//DataEncapsulated->HydratePlayerDataModel(*PlayersOnline[ChangeStatusPlayerIndex], true);
-
-			//PlayersOffline.Add(DataEncapsulated);
+			//// Debugging
+			//UE_LOG(LogTemp, Warning, TEXT("*****************"));
+			//UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
+			//	*UserChanged, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOffline.Add(PlayersOnline[ChangeStatusPlayerIndex]);
 
-			if (PlayersOnlineTotal > 1)
+			if (PlayersOnline.Num() > 1)
 			{
 				PlayersOnline.RemoveAt(ChangeStatusPlayerIndex);
 			}
@@ -190,38 +178,26 @@ void AGameModeExtended::StartStatusChangeSimulation()
 		}
 	}
 
-	//Debugging
+	// Trigger event that somedata has changed for the players
+	OnPlayerDataHasChanged.ExecuteIfBound(UserChanged, bChangedStatus, ChangeStatusPlayerIndex);
 
-	// ONLINE
+	////Debugging
 
-	for (UEncapsulatePlayerData* Data : PlayersOnline)
-	{
-		FString Nick = Data->Nickname.ToString();
-		UE_LOG(LogTemp, Warning, TEXT("Usuario online: %s"), *Nick);
-	}
+	//// ONLINE
 
-	UE_LOG(LogTemp, Warning, TEXT("================="));
+	//for (UEncapsulatePlayerData* Data : PlayersOnline)
+	//{
+	//	FString Nick = Data->Nickname.ToString();
+	//	UE_LOG(LogTemp, Warning, TEXT("Usuario online: %s"), *Nick);
+	//}
 
-	//OFFLINE
+	//UE_LOG(LogTemp, Warning, TEXT("================="));
 
-	for (UEncapsulatePlayerData* Data : PlayersOffline)
-	{
-		FString Nick = Data->Nickname.ToString();
-		UE_LOG(LogTemp, Warning, TEXT("Usuario offline: %s"), *Nick);
-	}
+	////OFFLINE
 
-
-	//float NewRandomTime = GetRandomTimeChangeStatus();
-
-	//UE_LOG(LogTemp, Warning, TEXT("nuevo intervalo de tiempo es: %f"), NewRandomTime);
-
-	////FTimerHandle ChangingStatusTimerHandle;
-	//GetWorldTimerManager().SetTimer(
-	//	ChangingStatusTimerHandle,
-	//	this,
-	//	&AGameModeExtended::StartStatusChangeSimulation,
-	//	NewRandomTime,
-	//	false,
-	//	0
-	//);
+	//for (UEncapsulatePlayerData* Data : PlayersOffline)
+	//{
+	//	FString Nick = Data->Nickname.ToString();
+	//	UE_LOG(LogTemp, Warning, TEXT("Usuario offline: %s"), *Nick);
+	//}
 }

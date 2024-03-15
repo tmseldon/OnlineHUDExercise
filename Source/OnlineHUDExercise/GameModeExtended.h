@@ -46,6 +46,8 @@ public:
 /**
  * 
  */
+ DECLARE_DELEGATE_ThreeParams(FOnPlayerStatusChanged, FString, bool, int);
+
 UCLASS()
 class ONLINEHUDEXERCISE_API AGameModeExtended : public AGameModeBase
 {
@@ -85,10 +87,11 @@ public:
 
 	AGameModeExtended();
 
+	FOnPlayerStatusChanged OnPlayerDataHasChanged;
+
 	UFUNCTION()
 	TArray<UEncapsulatePlayerData*> GetOnlinePlayers() const;
 
 	UFUNCTION()
 	TArray<UEncapsulatePlayerData*> GetOfflinePlayers() const;
-	
 };
