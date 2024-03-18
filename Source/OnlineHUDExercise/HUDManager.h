@@ -17,25 +17,38 @@ class ONLINEHUDEXERCISE_API AHUDManager : public AHUD
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
-	int NumberPlayerCardVMOnPool = 5;
+	int NumberPlayerCardVMOnPool = 3;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> OnlineScreenWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UUserWidget> ListContainerWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> PlayerCardWidget;
+
 
 	// Reference for the Player Controller
 	APlayerController* CharacterController;
 
+	// Reference for the Game Mode Extended 
+	class AGameModeExtended* GameModeExtendedService;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Card Components", meta = (AllowPrivateAccess = "true"))
 	// Pool of PlayerCard sidgets that we will use for each player
 	TArray<class UUserWidget*> ListSpawnedPlayerCardsWidgets;
 
 	// Method to create the Object Pool of Player Card View Models
 	void CreatePlayerCardPool();
 
+	void OnChangeData(FString NamePlayer, bool bOnlineStatus, int Level);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnReceivingPlayerData(FName NamePlayer, bool bOnlineStatus, int Level);
 
 };

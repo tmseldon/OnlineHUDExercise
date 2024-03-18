@@ -15,14 +15,19 @@ class ONLINEHUDEXERCISE_API UListContainerViewModel : public UMVVMViewModelBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, meta = (AllowPrivateAccess))
-	UUserWidget* PlayerCard;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter="IncreasePlayerCardsCount", Getter, meta = (AllowPrivateAccess))
+	int32 PlayerCardsAddedCount;
+
+	TArray<class UPlayerCardViewModel*> ListWidgetsDisplayed;
 
 public:
-
-	void SetPlayerCard(UUserWidget* CardWidget);
-
-
-	UUserWidget* GetPlayerCard() const;
 	
+	void IncreasePlayerCardsCount(int32 NotUsedValue);
+	int GetPlayerCardsAddedCount() const;
+
+	UFUNCTION(BlueprintPure, FieldNotify)
+	class UPlayerCardViewModel* AddNewWidgetPlayerCard();
+
+	void InitializeList(TArray<class UPlayerCardViewModel*> NewPlayerCards);
 };

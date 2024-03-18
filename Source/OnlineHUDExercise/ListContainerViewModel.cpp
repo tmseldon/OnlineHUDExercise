@@ -2,17 +2,37 @@
 
 
 #include "ListContainerViewModel.h"
+#include "PlayerCardViewModel.h"
 
-void UListContainerViewModel::SetPlayerCard(UUserWidget* CardWidget)
+
+int UListContainerViewModel::GetPlayerCardsAddedCount() const
 {
-    if (UE_MVVM_SET_PROPERTY_VALUE(PlayerCard, CardWidget))
-    {
-        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(PlayerCard);
-    }
+	return PlayerCardsAddedCount;
 }
 
-
-UUserWidget* UListContainerViewModel::GetPlayerCard() const
+void UListContainerViewModel::IncreasePlayerCardsCount(int32 NotUsedValue)
 {
-	return PlayerCard;
+	int32 NewCount = PlayerCardsAddedCount + 1;
+	UE_MVVM_SET_PROPERTY_VALUE(PlayerCardsAddedCount, NewCount);
+	UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(AddNewWidgetPlayerCard);
+}
+
+UPlayerCardViewModel* UListContainerViewModel::AddNewWidgetPlayerCard()
+{
+	return ListWidgetsDisplayed[PlayerCardsAddedCount];
+}
+
+void UListContainerViewModel::InitializeList(TArray<UPlayerCardViewModel*> NewPlayerCards)
+{
+	if (NewPlayerCards.IsEmpty())
+	{
+		return;
+	}
+
+	for (UPlayerCardViewModel* PlayerCard : NewPlayerCards)
+	{
+
+		ListWidgetsDisplayed.Add(PlayerCard);
+		IncreasePlayerCardsCount(1);
+	}
 }
