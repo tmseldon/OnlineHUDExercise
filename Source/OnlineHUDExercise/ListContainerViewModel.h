@@ -16,10 +16,14 @@ class ONLINEHUDEXERCISE_API UListContainerViewModel : public UMVVMViewModelBase
 
 protected:
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter="IncreasePlayerCardsCount", Getter, meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	ESlateVisibility ListVisibilityStatus;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter="IncreasePlayerCardsCount", Getter)
 	int32 PlayerCardsAddedCount;
 
 	TArray<class UPlayerCardViewModel*> ListWidgetsDisplayed;
+
 
 public:
 	
@@ -27,7 +31,15 @@ public:
 	int GetPlayerCardsAddedCount() const;
 
 	UFUNCTION(BlueprintPure, FieldNotify)
-	class UPlayerCardViewModel* AddNewWidgetPlayerCard();
+	class UPlayerCardViewModel* AddNewWidgetPlayerCard() const;
 
 	void InitializeList(TArray<class UPlayerCardViewModel*> NewPlayerCards);
+
+
+	// Button Title methods
+	ESlateVisibility GetListVisibilityStatus() const;
+	void SetListVisibilityStatus(ESlateVisibility NewStatusList);
+
+	UFUNCTION(BlueprintCallable)
+	void OnTitleButtonPress();
 };

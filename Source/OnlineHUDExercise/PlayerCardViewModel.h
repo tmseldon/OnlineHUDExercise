@@ -15,14 +15,15 @@ class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText NameField;
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText AliasField;
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText OnlineField;
+
 
 public:
 
@@ -30,10 +31,15 @@ public:
 	void SetAliasField(FText NewText);
 	void SetOnlineField(FText NewText);
 
+
+
 	FText GetNameField() const;
 	FText GetAliasField() const;
 	FText GetOnlineField() const;
-	
+
+
+
+
 	void TestingMethod();
 
 	//UPlayerCardViewModel();
