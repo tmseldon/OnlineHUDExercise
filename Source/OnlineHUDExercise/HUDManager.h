@@ -28,12 +28,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> PlayerCardWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UUserWidget> ToastMessageWidget;
+
 
 	// Reference for the Player Controller
 	APlayerController* CharacterController;
 
 	// Reference for the Game Mode Extended 
 	class AGameModeExtended* GameModeExtendedService;
+
+	class UToastMessageViewModel* NewToastVM;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Card Components", meta = (AllowPrivateAccess = "true"))
 	// Pool of PlayerCard sidgets that we will use for each player
@@ -50,5 +55,10 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnReceivingPlayerData(FName NamePlayer, bool bOnlineStatus, int Level);
+
+public:
+
+	UFUNCTION(BlueprintCallable)
+	void SetToastVMReference(UToastMessageViewModel* ReferenceVM);
 
 };

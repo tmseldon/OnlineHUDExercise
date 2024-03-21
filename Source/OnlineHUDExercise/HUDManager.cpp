@@ -7,6 +7,7 @@
 #include "ListPlayerExtended.h"
 #include "PlayerCardViewModel.h"
 #include "MVVMSubsystem.h"
+#include "ToastMessageViewModel.h"
 #include "Blueprint/UserWidget.h"
 #include "View/MVVMView.h" 
 
@@ -22,6 +23,10 @@ void AHUDManager::BeginPlay()
 		GameModeExtendedService->OnPlayerDataHasChanged.BindUObject(this, &AHUDManager::OnChangeData);
 	}
 
+	
+
+	
+
 }
 
 
@@ -29,9 +34,17 @@ void AHUDManager::OnChangeData(FString NamePlayer, bool bOnlineStatus, int Level
 {
 	// BluepreintEvent
 	OnReceivingPlayerData(FName(*NamePlayer), bOnlineStatus, Level);
+
+	if (NewToastVM != nullptr)
+	{
+		NewToastVM->TriggerToastMessage(ESlateVisibility::Visible, NamePlayer, FString::FromInt(Level));
+	}
 }
 
-
+void AHUDManager::SetToastVMReference(UToastMessageViewModel* ReferenceVM)
+{
+	NewToastVM = ReferenceVM;
+}
 
 
 
