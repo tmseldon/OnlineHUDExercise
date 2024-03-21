@@ -37,5 +37,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void TriggerToastMessage(ESlateVisibility ToastVisibility, FString NamePlayer = "", FString AliasPlayer = "");
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnToastAppear();
 	
 };

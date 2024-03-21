@@ -51,10 +51,18 @@ void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibilit
 	{
 	case ESlateVisibility::Hidden:
 		//Create a BlueprintEvent for animation here
+	
 		break;
 	case ESlateVisibility::Visible:
 		SetNameField(FText::FromString(NamePlayer));
 		SetAliasField(FText::FromString(AliasPlayer));
+		
+		FTimerHandle TimerHandler;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandler, [this]()
+			{
+				SetToastVisibilityStatus(ESlateVisibility::Hidden);
+			}, 2.5, false);
+
 		break;
 	}
 }
