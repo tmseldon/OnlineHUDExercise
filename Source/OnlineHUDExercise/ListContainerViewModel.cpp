@@ -6,36 +6,14 @@
 #include "Components/SlateWrapperTypes.h"
 
 
-int UListContainerViewModel::GetPlayerCardsAddedCount() const
+void UListContainerViewModel::AddCardPlayerVMToList(UPlayerCardViewModel* NewPlayerCard)
 {
-	return PlayerCardsAddedCount;
-}
-
-void UListContainerViewModel::IncreasePlayerCardsCount(int32 NotUsedValue)
-{
-	int32 NewCount = PlayerCardsAddedCount + 1;
-	UE_MVVM_SET_PROPERTY_VALUE(PlayerCardsAddedCount, NewCount);
-	UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(AddNewWidgetPlayerCard);
-}
-
-UPlayerCardViewModel* UListContainerViewModel::AddNewWidgetPlayerCard() const
-{
-	return ListWidgetsDisplayed[PlayerCardsAddedCount];
-}
-
-void UListContainerViewModel::InitializeList(TArray<UPlayerCardViewModel*> NewPlayerCards)
-{
-	if (NewPlayerCards.IsEmpty())
+	if (NewPlayerCard == nullptr)
 	{
 		return;
 	}
 
-	for (UPlayerCardViewModel* PlayerCard : NewPlayerCards)
-	{
-
-		ListWidgetsDisplayed.Add(PlayerCard);
-		IncreasePlayerCardsCount(1);
-	}
+	ListPlayersCardViewModels.Add(NewPlayerCard);
 }
 
 ESlateVisibility UListContainerViewModel::GetListVisibilityStatus() const

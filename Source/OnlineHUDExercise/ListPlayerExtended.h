@@ -18,9 +18,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UVerticalBox* ListContainer;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "List Params", meta = (AllowPrivateAccess = "true"))
+	int NumberOfCardsOnScreenForList;
 
-public:
 
-	void InitializeList(TArray<UUserWidget*> PlayerCardsToList);
-	
+//public:
+//
+//	void InitializeList(TArray<UUserWidget*> PlayerCardsToList);
+//	
 };

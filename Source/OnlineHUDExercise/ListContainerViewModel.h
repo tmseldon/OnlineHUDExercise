@@ -19,21 +19,16 @@ protected:
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	ESlateVisibility ListVisibilityStatus;
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter="IncreasePlayerCardsCount", Getter)
-	int32 PlayerCardsAddedCount;
 
-	TArray<class UPlayerCardViewModel*> ListWidgetsDisplayed;
+	// References with the Player Card View Models on the List
+	TArray<class UPlayerCardViewModel*> ListPlayersCardViewModels;
 
 
 public:
-	
-	void IncreasePlayerCardsCount(int32 NotUsedValue);
-	int GetPlayerCardsAddedCount() const;
 
-	UFUNCTION(BlueprintPure, FieldNotify)
-	class UPlayerCardViewModel* AddNewWidgetPlayerCard() const;
-
-	void InitializeList(TArray<class UPlayerCardViewModel*> NewPlayerCards);
+	// View Models Player Cards
+	UFUNCTION(BlueprintCallable)
+	void AddCardPlayerVMToList(UPlayerCardViewModel* NewPlayerCard);
 
 
 	// Button Title methods
