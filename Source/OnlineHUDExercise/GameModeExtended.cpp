@@ -103,6 +103,8 @@ void AGameModeExtended::CreateInitialModel()
 
 	UE_LOG(LogTemp, Warning, TEXT("Cantidad de jugadores offline: %d"), PlayersOffline.Num());
 	UE_LOG(LogTemp, Warning, TEXT("Cantidad de jugadores online: %d"), PlayersOnline.Num());
+
+	OnPlayerDataModelHydrated.ExecuteIfBound();
 }
 
 int AGameModeExtended::GetRandomTimeChangeStatus()
@@ -116,7 +118,8 @@ void AGameModeExtended::StartStatusChangeSimulation()
 	int ChangeStatus = FMath::RandRange(0, 1);
 
 	// Changed information to send on the event
-	FString UserChanged;
+	// We are asuming that nicknames are unique
+	FString NicknameChangeStatus;
 	bool bChangedStatus = false;
 	int ChangeStatusPlayerIndex = -1;
 
@@ -128,13 +131,13 @@ void AGameModeExtended::StartStatusChangeSimulation()
 			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOffline.Num() - 1);
 			PlayersOffline[ChangeStatusPlayerIndex]->bIsOnline = true;
 
-			UserChanged = PlayersOffline[ChangeStatusPlayerIndex]->Nickname.ToString();
+			NicknameChangeStatus = PlayersOffline[ChangeStatusPlayerIndex]->Nickname.ToString();
 			bChangedStatus = PlayersOffline[ChangeStatusPlayerIndex]->bIsOnline;
 
 			//// Debugging
 			//UE_LOG(LogTemp, Warning, TEXT("*****************"));
 			//UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
-			//	*UserChanged, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
+			//	*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOnline.Add(PlayersOffline[ChangeStatusPlayerIndex]);
 
@@ -152,18 +155,18 @@ void AGameModeExtended::StartStatusChangeSimulation()
 	//Case changing someone from Online to Offline
 	else
 	{
-		if (PlayersOnline.Num() >= 0)
+		if (PlayersOnline.Num() > 0)
 		{
 			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOnline.Num() - 1);
 			PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline = false;
 
-			UserChanged = PlayersOnline[ChangeStatusPlayerIndex]->Nickname.ToString();
+			NicknameChangeStatus = PlayersOnline[ChangeStatusPlayerIndex]->Nickname.ToString();
 			bChangedStatus = PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline;
 
 			//// Debugging
 			//UE_LOG(LogTemp, Warning, TEXT("*****************"));
 			//UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
-			//	*UserChanged, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
+			//	*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOffline.Add(PlayersOnline[ChangeStatusPlayerIndex]);
 
@@ -178,8 +181,16 @@ void AGameModeExtended::StartStatusChangeSimulation()
 		}
 	}
 
-	// Trigger event that somedata has changed for the players
-	OnPlayerDataHasChanged.ExecuteIfBound(UserChanged, bChangedStatus, ChangeStatusPlayerIndex);
+	if (ChangeStatusPlayerIndex != -1)
+	{
+		// Trigger event that somedata has changed for the players
+		OnPlayerDataHasChanged.ExecuteIfBound(NicknameChangeStatus, bChangedStatus, ChangeStatusPlayerIndex);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No change on connection emulated"));
+	}
+
 
 	////Debugging
 

@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPlayerDataChangesEvent, FString, NickName, int32, OldIndex, bool, IsOnline);
+
 UCLASS()
 class ONLINEHUDEXERCISE_API AHUDManager : public AHUD
 {
@@ -38,16 +41,22 @@ private:
 	// Reference for the Game Mode Extended 
 	class AGameModeExtended* GameModeExtendedService;
 
+	//Lists of players with extra info
+	TArray<class UEncapsulatePlayerData*> OnlinePlayerList;
+	TArray<class UEncapsulatePlayerData*> OfflinePlayerList;
+
+
+
+
 	class UToastMessageViewModel* NewToastVM;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Card Components", meta = (AllowPrivateAccess = "true"))
 	// Pool of PlayerCard sidgets that we will use for each player
 	TArray<class UUserWidget*> ListSpawnedPlayerCardsWidgets;
 
-	// Method to create the Object Pool of Player Card View Models
-	void CreatePlayerCardPool();
-
 	void OnChangeData(FString NamePlayer, bool bOnlineStatus, int Level);
+
+	void CreatePlayerStatusLists();
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,8 +66,16 @@ protected:
 	void OnReceivingPlayerData(FName NamePlayer, bool bOnlineStatus, int Level);
 
 public:
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerDataChangesEvent OnPlayerHasChangedDataEvent;
+
 
 	UFUNCTION(BlueprintCallable)
 	void SetToastVMReference(UToastMessageViewModel* ReferenceVM);
+
+	TArray<class UEncapsulatePlayerData*> GetUpdatedListOnline() const;
+	TArray<class UEncapsulatePlayerData*> GetUpdatedListOffline() const;
+
+	void TestingHUD();
 
 };

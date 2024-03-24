@@ -46,7 +46,8 @@ public:
 /**
  * 
  */
- DECLARE_DELEGATE_ThreeParams(FOnPlayerStatusChanged, FString, bool, int);
+DECLARE_DELEGATE(FOnModelCreated);
+DECLARE_DELEGATE_ThreeParams(FOnPlayerStatusChanged, FString, bool, int);
 
 UCLASS()
 class ONLINEHUDEXERCISE_API AGameModeExtended : public AGameModeBase
@@ -87,7 +88,10 @@ public:
 
 	AGameModeExtended();
 
+	
+	FOnModelCreated OnPlayerDataModelHydrated;
 	FOnPlayerStatusChanged OnPlayerDataHasChanged;
+
 
 	UFUNCTION()
 	TArray<UEncapsulatePlayerData*> GetOnlinePlayers() const;
