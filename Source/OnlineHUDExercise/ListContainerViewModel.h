@@ -23,12 +23,15 @@ protected:
 	// References with the Player Card View Models on the List
 	TArray<class UPlayerCardViewModel*> ListPlayersCardViewModels;
 
+	// References with the Player Card Widgets on the List
+	TMap<class UPlayerCardViewModel*, class UUserWidget*> MapPlayersCards;
+
 
 public:
 
 	// View Models Player Cards
 	UFUNCTION(BlueprintCallable)
-	void AddCardPlayerVMToList(UPlayerCardViewModel* NewPlayerCard);
+	void AddCardPlayerReferencesToList(UPlayerCardViewModel* NewPlayerCardVM, UUserWidget* NewPlayerCardWidget);
 
 
 	// Button Title methods

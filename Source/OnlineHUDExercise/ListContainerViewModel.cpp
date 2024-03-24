@@ -6,14 +6,17 @@
 #include "Components/SlateWrapperTypes.h"
 
 
-void UListContainerViewModel::AddCardPlayerVMToList(UPlayerCardViewModel* NewPlayerCard)
+void UListContainerViewModel::AddCardPlayerReferencesToList(
+	UPlayerCardViewModel* NewPlayerCardVM, 
+	UUserWidget* NewPlayerCardWidget)
 {
-	if (NewPlayerCard == nullptr)
+	if (NewPlayerCardVM == nullptr || NewPlayerCardWidget == nullptr)
 	{
 		return;
 	}
 
-	ListPlayersCardViewModels.Add(NewPlayerCard);
+	ListPlayersCardViewModels.Add(NewPlayerCardVM);
+	MapPlayersCards.Add(NewPlayerCardVM, NewPlayerCardWidget);
 }
 
 ESlateVisibility UListContainerViewModel::GetListVisibilityStatus() const

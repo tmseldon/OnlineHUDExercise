@@ -13,6 +13,7 @@ void UPlayerCardViewModel::SetNameField(FText NewText)
 {
     if (UE_MVVM_SET_PROPERTY_VALUE(NameField, NewText))
     {
+        UE_LOG(LogTemp, Warning, TEXT("Seteando nombre en VM"));
         UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(NameField);
     }
 }
