@@ -64,6 +64,33 @@ void UListContainerViewModel::SetListVisibilityStatus(ESlateVisibility NewStatus
 	}
 }
 
+float UListContainerViewModel::GetCurrentActivePageValue() const
+{
+	return CurrentActivePageValue;
+}
+
+void UListContainerViewModel::SetCurrentActivePageValue(float NewValue)
+{
+	if (UE_MVVM_SET_PROPERTY_VALUE(CurrentActivePageValue, NewValue))
+	{
+		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
+		DrawActiveScreen();
+	}
+}
+
+float UListContainerViewModel::GetMaxPageValue() const
+{
+	return MaxPageValue;
+}
+
+void UListContainerViewModel::SetMaxPageValue(float NewValue)
+{
+	if (UE_MVVM_SET_PROPERTY_VALUE(MaxPageValue, NewValue))
+	{
+		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(MaxPageValue);
+	}
+}
+
 void UListContainerViewModel::OnTitleButtonPress()
 {
 	switch (ListVisibilityStatus)
@@ -80,24 +107,42 @@ void UListContainerViewModel::OnTitleButtonPress()
 
 void UListContainerViewModel::DrawActiveScreen()
 {
-	// identificar en qué página de la lista estamos mostrando
+	// CurrentActivePage was updated and we call this method
+	// We calculate the top index player card
+	TopIndexOnActivePage = CurrentActivePageValue * NumberCardsperScreen;
+	UE_LOG(LogTemp, Warning, TEXT("Top Index: %f"), CurrentActivePageValue);
 
-	// tomar la informacion sobre esa pagina, tomando como indicador el index top 
+	// Recalculate the max amount of pages just in case
+	if (NumberCardsperScreen > 0)
+	{
+		float TotalPagesList = FMath::DivideAndRoundUp(ListPlayerData.Num(), NumberCardsperScreen) - 1;
+		
+		//if (CurrentActivePageValue > TotalPagesList)
+		//{
+		//	CurrentActivePageValue = TotalPagesList;
+		//}
 
-	// rellenar los ViewModels con la nueva info
+		UE_LOG(LogTemp, Warning, TEXT("Totla pages: %f"), TotalPagesList);
 
+		SetMaxPageValue(TotalPagesList);
+	}
 
-	UE_LOG(LogTemp, Warning, TEXT("el tamaño del listado de jugadores en DRAW: %d"), ListPlayerData.Num());
-	UE_LOG(LogTemp, Warning, TEXT("el tamaño del listado de VM en DRAW: %d"), ListPlayersCardViewModels.Num());
-
-
-	for (int IndexPlayerCardVM = 0; IndexPlayerCardVM < NumberCardsperScreen; IndexPlayerCardVM++)
+	for (int IndexPlayerCardVM = TopIndexOnActivePage; 
+		IndexPlayerCardVM < NumberCardsperScreen + TopIndexOnActivePage;
+		IndexPlayerCardVM++)
 	{
 		if (ListPlayerData.IsValidIndex(IndexPlayerCardVM))
 		{
-			ListPlayersCardViewModels[IndexPlayerCardVM]
+			if (ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
+				->GetCardVisibilityStatus() == ESlateVisibility::Hidden)
+			{
+				ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
+					->SetCardVisibilityStatus(ESlateVisibility::Visible);
+			}
+
+			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->SetNameField(FText::FromName(ListPlayerData[IndexPlayerCardVM]->Name));
-			ListPlayersCardViewModels[IndexPlayerCardVM]
+			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->SetAliasField(FText::FromName(ListPlayerData[IndexPlayerCardVM]->Nickname));
 		}
 		else
@@ -105,10 +150,8 @@ void UListContainerViewModel::DrawActiveScreen()
 			// we need to clear the player card
 			// need to add a binder to control visibility
 
-			ListPlayersCardViewModels[IndexPlayerCardVM]
-				->SetNameField(FText::FromString(TEXT("vacio por ahora")));
-			ListPlayersCardViewModels[IndexPlayerCardVM]
-				->SetAliasField(FText::FromString(TEXT("vacio por ahora")));
+			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
+				->SetCardVisibilityStatus(ESlateVisibility::Hidden);
 
 		}
 	}

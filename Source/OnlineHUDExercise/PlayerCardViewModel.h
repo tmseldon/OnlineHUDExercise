@@ -15,6 +15,10 @@ class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase
 	GENERATED_BODY()
 
 protected:
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	ESlateVisibility CardVisibilityStatus;
+
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText NameField;
 
@@ -38,6 +42,8 @@ public:
 	FText GetOnlineField() const;
 
 
+	ESlateVisibility GetCardVisibilityStatus() const;
+	void SetCardVisibilityStatus(ESlateVisibility NewStatusList);
 
 
 	void TestingMethod();

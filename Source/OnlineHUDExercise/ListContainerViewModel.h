@@ -49,6 +49,14 @@ protected:
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	ESlateVisibility ListVisibilityStatus;
 
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	float CurrentActivePageValue;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	float MaxPageValue;
+
+	float TopIndexOnActivePage;
+
 public:
 
 	UFUNCTION(BlueprintCallable)
@@ -59,11 +67,19 @@ public:
 	void AddCardPlayerReferencesToList(UPlayerCardViewModel* NewPlayerCardVM, UUserWidget* NewPlayerCardWidget);
 
 
+	// Bind properties methods for Slider
+	float GetCurrentActivePageValue() const;
+	void SetCurrentActivePageValue(float NewValue);
+
+	float GetMaxPageValue() const;
+	void SetMaxPageValue(float NewValue);
+
+
 	/*
 	/ Button title section
 	*/
 
-	// Bind properties methods
+	// Bind properties methods for Title Button
 	ESlateVisibility GetListVisibilityStatus() const;
 	void SetListVisibilityStatus(ESlateVisibility NewStatusList);
 

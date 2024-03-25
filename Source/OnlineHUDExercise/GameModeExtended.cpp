@@ -68,14 +68,16 @@ void AGameModeExtended::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("primer intervalo de tiempo es: %f"), InitialRandomTime);
 
-	GetWorldTimerManager().SetTimer(
-		ChangingStatusTimerHandle, 
-		this, 
-		&AGameModeExtended::StartStatusChangeSimulation, 
-		InitialRandomTime, 
-		true, 
-		0
-	);
+	//Remove comments, putting like this for testing list
+
+	//GetWorldTimerManager().SetTimer(
+	//	ChangingStatusTimerHandle, 
+	//	this, 
+	//	&AGameModeExtended::StartStatusChangeSimulation, 
+	//	InitialRandomTime, 
+	//	true, 
+	//	0
+	//);
 }
 
 void AGameModeExtended::CreateInitialModel()

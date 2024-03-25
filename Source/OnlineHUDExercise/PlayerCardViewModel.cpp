@@ -4,6 +4,20 @@
 #include "PlayerCardViewModel.h"
 #include "GameModeExtended.h"
 
+ESlateVisibility UPlayerCardViewModel::GetCardVisibilityStatus() const
+{
+    return CardVisibilityStatus;
+}
+
+
+void UPlayerCardViewModel::SetCardVisibilityStatus(ESlateVisibility NewStatusList)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(CardVisibilityStatus, NewStatusList))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CardVisibilityStatus);
+    }
+}
+
 FText UPlayerCardViewModel::GetNameField() const
 {
     return NameField;
