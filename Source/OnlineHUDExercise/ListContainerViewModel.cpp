@@ -126,10 +126,15 @@ void UListContainerViewModel::DrawActiveScreen()
 	{
 		float TotalPagesList = FMath::DivideAndRoundUp(ListPlayerData.Num(), NumberCardsperScreen) - 1;
 		
-		//if (CurrentActivePageValue > TotalPagesList)
-		//{
-		//	CurrentActivePageValue = TotalPagesList;
-		//}
+		// If the number of pages is reduced, and we are in a page that will disappear, 
+		// better to force the list go to the new last page (for safety)
+		if (CurrentActivePageValue > TotalPagesList)
+		{
+			CurrentActivePageValue = TotalPagesList;
+			TopIndexOnActivePage = CurrentActivePageValue * NumberCardsperScreen;
+
+			UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
+		}
 
 		UE_LOG(LogTemp, Warning, TEXT("Totla pages: %f"), TotalPagesList);
 

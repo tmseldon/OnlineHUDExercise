@@ -64,6 +64,10 @@ private:
 	UDataTable* InitialPlayersStatus;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection Simulation", meta = (AllowPrivateAccess = "true"))
+	bool bIsTurnOnSimulation = true;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection Simulation", meta = (AllowPrivateAccess = "true"))
 	int ChangeConnectionRangeSecondsMin = 5;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection Simulation", meta = (AllowPrivateAccess = "true"))
