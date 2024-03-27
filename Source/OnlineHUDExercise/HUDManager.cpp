@@ -3,7 +3,6 @@
 
 #include "HUDManager.h"
 #include "GameModeExtended.h"
-#include "ListContainerViewModel.h"
 #include "ListPlayerExtended.h"
 #include "PlayerCardViewModel.h"
 #include "MVVMSubsystem.h"
@@ -36,15 +35,17 @@ void AHUDManager::CreatePlayerStatusLists()
 	UE_LOG(LogTemp, Warning, TEXT("el tamanyoo del listado offline ne HUD es: %d"), OfflinePlayerList.Num());
 }
 
-TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOnline() const
+TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOnline()
 {
+	OnlinePlayerList = GameModeExtendedService->GetOnlinePlayers();
 	//need to add extra info here before returning list
 	UE_LOG(LogTemp, Warning, TEXT("REtornando el tamanyoo del listado online ne HUD es: %d"), OnlinePlayerList.Num());
 	return OnlinePlayerList;
 }
 
-TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOffline() const
+TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOffline()
 {
+	OfflinePlayerList = GameModeExtendedService->GetOfflinePlayers();
 	//need to add extra info here before returning list
 	UE_LOG(LogTemp, Warning, TEXT("REtornando el tamanyoo del listado offline ne HUD es: %d"), OfflinePlayerList.Num());
 	return OfflinePlayerList;
@@ -57,17 +58,20 @@ void AHUDManager::TestingHUD()
 }
 
 
-void AHUDManager::OnChangeData(FString NamePlayer, bool bOnlineStatus, int Level)
+void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, int OldIndex)
 {
 	// BluepreintEvent (este es para pruebas en donde se cambia estado de player card desde BP)
-	OnReceivingPlayerData(FName(*NamePlayer), bOnlineStatus, Level);
+	OnReceivingPlayerData(FName(*NicknamePlayer), bOnlineStatus, OldIndex);
 
 	if (NewToastVM != nullptr)
 	{
 		//Nota HUD manager no deberia tener esta referencia, deberia ser al reves
 		// Esto para testeo por mientras
-		NewToastVM->TriggerToastMessage(ESlateVisibility::Visible, NamePlayer, FString::FromInt(Level));
+		NewToastVM->TriggerToastMessage(ESlateVisibility::Visible, NicknamePlayer, FString::FromInt(OldIndex));
 	}
+
+	EListMode NewListMode = (bOnlineStatus == true) ? EListMode::Online : EListMode::Offline;
+	OnPlayerHasChangedDataEvent.Broadcast(NicknamePlayer, OldIndex, NewListMode);
 }
 
 //Nota HUD manager no deberia tener esta referencia, deberia ser al reves

@@ -70,14 +70,14 @@ void AGameModeExtended::BeginPlay()
 
 	//Remove comments, putting like this for testing list
 
-	//GetWorldTimerManager().SetTimer(
-	//	ChangingStatusTimerHandle, 
-	//	this, 
-	//	&AGameModeExtended::StartStatusChangeSimulation, 
-	//	InitialRandomTime, 
-	//	true, 
-	//	0
-	//);
+	GetWorldTimerManager().SetTimer(
+		ChangingStatusTimerHandle, 
+		this, 
+		&AGameModeExtended::StartStatusChangeSimulation, 
+		InitialRandomTime, 
+		true, 
+		0
+	);
 }
 
 void AGameModeExtended::CreateInitialModel()

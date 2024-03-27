@@ -20,7 +20,16 @@ void UListContainerViewModel::InitializeViewModel(AHUDManager* HUDReference, ELi
 	HudManager = HUDReference;
 	CurrentListMode = Mode;
 	NumberCardsperScreen = NumberCards;
+	UpdatePlayerList();
 
+	UE_LOG(LogTemp, Warning, TEXT("el tamaño del listado es: %d"), ListPlayerData.Num());
+
+	/*HudManager->OnPlayerHasChangedDataEvent.RemoveDynamic(this, &UListContainerViewModel::OnPlayerHasChangedEventHandler);*/
+	HudManager->OnPlayerHasChangedDataEvent.AddDynamic(this, &UListContainerViewModel::OnPlayerHasChangedEventHandler);
+}
+
+void UListContainerViewModel::UpdatePlayerList()
+{
 	switch (CurrentListMode)
 	{
 	case EListMode::Online:
@@ -30,8 +39,6 @@ void UListContainerViewModel::InitializeViewModel(AHUDManager* HUDReference, ELi
 		ListPlayerData = HudManager->GetUpdatedListOffline();
 		break;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("el tamaño del listado es: %d"), ListPlayerData.Num());
 }
 
 void UListContainerViewModel::AddCardPlayerReferencesToList(
@@ -112,6 +119,8 @@ void UListContainerViewModel::DrawActiveScreen()
 	TopIndexOnActivePage = CurrentActivePageValue * NumberCardsperScreen;
 	UE_LOG(LogTemp, Warning, TEXT("Top Index: %f"), CurrentActivePageValue);
 
+	UpdatePlayerList();
+
 	// Recalculate the max amount of pages just in case
 	if (NumberCardsperScreen > 0)
 	{
@@ -156,4 +165,23 @@ void UListContainerViewModel::DrawActiveScreen()
 		}
 	}
 	
+}
+
+void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, int OldIndex, EListMode CurrentMode)
+{
+	if (CurrentMode == CurrentListMode)
+	{
+		// Add here some BP event for animation or delay?
+
+		DrawActiveScreen();
+	}
+	else
+	{
+		// we need to determine if the player is seeing the screen where the player has changed os state
+
+		//if that is the case, we need to create a animation or graphical effect on the player and
+		//update the list
+
+		// if it is not on the screen where the player is, just Redraw
+	}
 }

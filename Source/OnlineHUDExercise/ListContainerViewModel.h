@@ -40,8 +40,13 @@ private:
 	UPROPERTY()
 	TArray<class UEncapsulatePlayerData*> ListPlayerData;
 
+	void UpdatePlayerList();
+
 	UFUNCTION(BlueprintCallable)
 	void DrawActiveScreen();
+
+	UFUNCTION()
+	void OnPlayerHasChangedEventHandler(FString NickName, int OldIndex, EListMode CurrentMode);
 
 
 protected:

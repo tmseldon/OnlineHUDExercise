@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ListContainerViewModel.h"
 #include "GameFramework/HUD.h"
 #include "HUDManager.generated.h"
 
@@ -10,7 +11,7 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPlayerDataChangesEvent, FString, NickName, int32, OldIndex, bool, IsOnline);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPlayerDataChangesEvent, FString, NickName, int32, OldIndex, EListMode, CurrentMode);
 
 UCLASS()
 class ONLINEHUDEXERCISE_API AHUDManager : public AHUD
@@ -63,7 +64,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnReceivingPlayerData(FName NamePlayer, bool bOnlineStatus, int Level);
+	void OnReceivingPlayerData(FName NickNamePlayer, bool bOnlineStatus, int OldIndex);
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -73,8 +74,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetToastVMReference(UToastMessageViewModel* ReferenceVM);
 
-	TArray<class UEncapsulatePlayerData*> GetUpdatedListOnline() const;
-	TArray<class UEncapsulatePlayerData*> GetUpdatedListOffline() const;
+	TArray<class UEncapsulatePlayerData*> GetUpdatedListOnline();
+	TArray<class UEncapsulatePlayerData*> GetUpdatedListOffline();
 
 	void TestingHUD();
 
