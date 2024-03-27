@@ -168,9 +168,9 @@ void AGameModeExtended::StartStatusChangeSimulation()
 			bChangedStatus = PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline;
 
 			//// Debugging
-			//UE_LOG(LogTemp, Warning, TEXT("*****************"));
-			//UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
-			//	*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
+			UE_LOG(LogTemp, Warning, TEXT("*****************"));
+			UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
+				*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOffline.Add(PlayersOnline[ChangeStatusPlayerIndex]);
 

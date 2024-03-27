@@ -53,8 +53,8 @@ void UListContainerViewModel::AddCardPlayerReferencesToList(
 	ListPlayersCardViewModels.Add(NewPlayerCardVM);
 	MapPlayersCards.Add(NewPlayerCardVM, NewPlayerCardWidget);
 
-	UE_LOG(LogTemp, Warning, TEXT("Checking ListPlayerCardsVM: %d same as MaxPerScreen: %d"),
-		ListPlayersCardViewModels.Num(), NumberCardsperScreen);
+	//UE_LOG(LogTemp, Warning, TEXT("Checking ListPlayerCardsVM: %d same as MaxPerScreen: %d"),
+	//	ListPlayersCardViewModels.Num(), NumberCardsperScreen);
 }
 
 ESlateVisibility UListContainerViewModel::GetListVisibilityStatus() const
@@ -117,9 +117,9 @@ void UListContainerViewModel::DrawActiveScreen()
 	// CurrentActivePage was updated and we call this method
 	// We calculate the top index player card
 	TopIndexOnActivePage = CurrentActivePageValue * NumberCardsperScreen;
-	UE_LOG(LogTemp, Warning, TEXT("Top Index: %f"), CurrentActivePageValue);
+	/*UE_LOG(LogTemp, Warning, TEXT("Top Index: %f"), CurrentActivePageValue);*/
 
-	UpdatePlayerList();
+	//UpdatePlayerList();
 
 	// Recalculate the max amount of pages just in case
 	if (NumberCardsperScreen > 0)
@@ -136,7 +136,7 @@ void UListContainerViewModel::DrawActiveScreen()
 			UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("Totla pages: %f"), TotalPagesList);
+		/*UE_LOG(LogTemp, Warning, TEXT("Totla pages: %f"), TotalPagesList);*/
 
 		SetMaxPageValue(TotalPagesList);
 	}
@@ -150,6 +150,7 @@ void UListContainerViewModel::DrawActiveScreen()
 			if (ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->GetCardVisibilityStatus() == ESlateVisibility::Hidden)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("agregando anuimacion visible aca en indice %d"), IndexPlayerCardVM - TopIndexOnActivePage);
 				ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 					->SetCardVisibilityStatus(ESlateVisibility::Visible);
 			}
@@ -163,10 +164,10 @@ void UListContainerViewModel::DrawActiveScreen()
 		{
 			// we need to clear the player card
 			// need to add a binder to control visibility
+			UE_LOG(LogTemp, Warning, TEXT("agregando anuimacion descartar aca en indice %d"), IndexPlayerCardVM - TopIndexOnActivePage);
 
 			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->SetCardVisibilityStatus(ESlateVisibility::Hidden);
-
 		}
 	}
 	
@@ -174,19 +175,67 @@ void UListContainerViewModel::DrawActiveScreen()
 
 void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, int OldIndex, EListMode CurrentMode)
 {
-	if (CurrentMode == CurrentListMode)
-	{
-		// Add here some BP event for animation or delay?
 
-		DrawActiveScreen();
-	}
-	else
-	{
-		// we need to determine if the player is seeing the screen where the player has changed os state
+	DrawActiveScreen();
 
-		//if that is the case, we need to create a animation or graphical effect on the player and
-		//update the list
+//	FString TextEnum = UEnum::GetValueAsString(CurrentMode);
+//	FString ListModeEnum = UEnum::GetValueAsString(CurrentListMode);
+//
+//	UE_LOG(LogTemp, Warning, TEXT("enum en evento es: %s y este listado es: %s"), *TextEnum, *ListModeEnum);
+//	if (CurrentMode == CurrentListMode)
+//	{
+//		// Add here some BP event for animation or delay?
+//
+//		DrawActiveScreen();
+//		return;
+//	}
+//
+//
+//	for (UEncapsulatePlayerData* Data : ListPlayerData)
+//{
+//	FString Nick = Data->Nickname.ToString();
+//	UE_LOG(LogTemp, Warning, TEXT("Usuarios online: %s"), *Nick);
+//}
+//
+//
+//	int32 ListOldIndex = ListPlayerData.IndexOfByPredicate([NickName](const UEncapsulatePlayerData* PlayerData)
+//		{
+//			return PlayerData->Nickname == NickName;
+//		});
+//
+//
+//
+//
+//	// We need to determine if the player is seeing the screen where the player has changed of state
+//	// Otherwise, we just redraw
+//	float IndexOnPageNumber = FMath::DivideAndRoundDown(ListOldIndex, NumberCardsperScreen);
+//	UE_LOG(LogTemp, Warning, TEXT("el indice calculado del oldindex: %d y esta en la pagina: %f"), ListOldIndex, IndexOnPageNumber);
+//
+//	if (IndexOnPageNumber == CurrentActivePageValue)
+//	{
+//		//if that is the case, we need to create a animation or graphical effect on the player and
+//		//update the list
+//		int IndexCardViewModel = ListOldIndex % NumberCardsperScreen;
+//		UE_LOG(LogTemp, Warning, TEXT("El indice calculado para el VM que se tiene que ir es: %d"), IndexCardViewModel);
+//		
+//		// This is just for Testing
+//		FTimerHandle TimerHandler;
+//		GetWorld()->GetTimerManager().SetTimer(
+//			TimerHandler,
+//			[this, IndexCardViewModel]()
+//			{
+//				ListPlayersCardViewModels[IndexCardViewModel]
+//					->SetNameField(FText::FromString(TEXT("Esta card tiene que ser borrada")));
+//				DrawActiveScreen();
+//			},
+//			0.5f,
+//			false
+//		);
+//	}
+//	else
+//	{
+//		DrawActiveScreen();
+//	}
 
-		// if it is not on the screen where the player is, just Redraw
-	}
+	
 }
