@@ -124,6 +124,7 @@ void AGameModeExtended::StartStatusChangeSimulation()
 	// Changed information to send on the event
 	// We are asuming that nicknames are unique
 	FString NicknameChangeStatus;
+	UEncapsulatePlayerData* PlayerData = nullptr;
 	bool bChangedStatus = false;
 	int ChangeStatusPlayerIndex = -1;
 
@@ -144,6 +145,7 @@ void AGameModeExtended::StartStatusChangeSimulation()
 			//	*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOnline.Add(PlayersOffline[ChangeStatusPlayerIndex]);
+			PlayerData = PlayersOffline[ChangeStatusPlayerIndex];
 
 			if (PlayersOffline.Num() > 1)
 			{
@@ -173,6 +175,7 @@ void AGameModeExtended::StartStatusChangeSimulation()
 				*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOffline.Add(PlayersOnline[ChangeStatusPlayerIndex]);
+			PlayerData = PlayersOnline[ChangeStatusPlayerIndex];
 
 			if (PlayersOnline.Num() > 1)
 			{
@@ -188,7 +191,7 @@ void AGameModeExtended::StartStatusChangeSimulation()
 	if (ChangeStatusPlayerIndex != -1)
 	{
 		// Trigger event that somedata has changed for the players
-		OnPlayerDataHasChanged.ExecuteIfBound(NicknameChangeStatus, bChangedStatus, ChangeStatusPlayerIndex);
+		OnPlayerDataHasChanged.ExecuteIfBound(NicknameChangeStatus, bChangedStatus, PlayerData);
 	}
 	else
 	{

@@ -58,20 +58,20 @@ void AHUDManager::TestingHUD()
 }
 
 
-void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, int OldIndex)
+void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, UEncapsulatePlayerData* PlayerData)
 {
 	// BluepreintEvent (este es para pruebas en donde se cambia estado de player card desde BP)
-	OnReceivingPlayerData(FName(*NicknamePlayer), bOnlineStatus, OldIndex);
+	OnReceivingPlayerData(FName(*NicknamePlayer), bOnlineStatus, PlayerData);
 
-	if (NewToastVM != nullptr)
-	{
-		//Nota HUD manager no deberia tener esta referencia, deberia ser al reves
-		// Esto para testeo por mientras
-		NewToastVM->TriggerToastMessage(ESlateVisibility::Visible, NicknamePlayer, FString::FromInt(OldIndex));
-	}
+	//if (NewToastVM != nullptr)
+	//{
+	//	//Nota HUD manager no deberia tener esta referencia, deberia ser al reves
+	//	// Esto para testeo por mientras
+	//	NewToastVM->TriggerToastMessage(ESlateVisibility::Visible, NicknamePlayer, FString::FromInt(OldIndex));
+	//}
 
 	EListMode NewListMode = (bOnlineStatus == true) ? EListMode::Online : EListMode::Offline;
-	OnPlayerHasChangedDataEvent.Broadcast(NicknamePlayer, OldIndex, NewListMode);
+	OnPlayerHasChangedDataEvent.Broadcast(NicknamePlayer, PlayerData, NewListMode);
 }
 
 //Nota HUD manager no deberia tener esta referencia, deberia ser al reves

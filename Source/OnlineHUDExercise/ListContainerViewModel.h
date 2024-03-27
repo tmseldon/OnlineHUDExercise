@@ -46,7 +46,7 @@ private:
 	void DrawActiveScreen();
 
 	UFUNCTION()
-	void OnPlayerHasChangedEventHandler(FString NickName, int OldIndex, EListMode CurrentMode);
+	void OnPlayerHasChangedEventHandler(FString NickName, class UEncapsulatePlayerData* PlayerData, EListMode CurrentMode);
 
 
 protected:

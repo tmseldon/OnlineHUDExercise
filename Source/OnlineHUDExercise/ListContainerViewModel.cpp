@@ -173,7 +173,7 @@ void UListContainerViewModel::DrawActiveScreen()
 	
 }
 
-void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, int OldIndex, EListMode CurrentMode)
+void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, UEncapsulatePlayerData* PlayerData, EListMode CurrentMode)
 {
 
 	DrawActiveScreen();

@@ -47,7 +47,7 @@ public:
  * 
  */
 DECLARE_DELEGATE(FOnModelCreated);
-DECLARE_DELEGATE_ThreeParams(FOnPlayerStatusChanged, FString, bool, int);
+DECLARE_DELEGATE_ThreeParams(FOnPlayerStatusChanged, FString, bool, UEncapsulatePlayerData*);
 
 UCLASS()
 class ONLINEHUDEXERCISE_API AGameModeExtended : public AGameModeBase

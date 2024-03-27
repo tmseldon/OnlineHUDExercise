@@ -11,7 +11,7 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPlayerDataChangesEvent, FString, NickName, int32, OldIndex, EListMode, CurrentMode);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnPlayerDataChangesEvent, FString, NickName, class UEncapsulatePlayerData*, PlayerData, EListMode, CurrentMode);
 
 UCLASS()
 class ONLINEHUDEXERCISE_API AHUDManager : public AHUD
@@ -55,7 +55,8 @@ private:
 	// Pool of PlayerCard sidgets that we will use for each player
 	TArray<class UUserWidget*> ListSpawnedPlayerCardsWidgets;
 
-	void OnChangeData(FString NamePlayer, bool bOnlineStatus, int Level);
+	// Delegate to listen changes on GameModeExtended
+	void OnChangeData(FString NicknamePlayer, bool bOnlineStatus, class UEncapsulatePlayerData* PlayerData);
 
 	void CreatePlayerStatusLists();
 
@@ -63,8 +64,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Event for BP if we need make something on BP from HUD Manager
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnReceivingPlayerData(FName NickNamePlayer, bool bOnlineStatus, int OldIndex);
+	void OnReceivingPlayerData(FName NickNamePlayer, bool bOnlineStatus, class UEncapsulatePlayerData* PlayerData);
 
 public:
 	UPROPERTY(BlueprintAssignable)
