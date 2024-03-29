@@ -48,6 +48,9 @@ private:
 	UFUNCTION()
 	void OnPlayerHasChangedEventHandler(FString NickName, class UEncapsulatePlayerData* PlayerData, EListMode CurrentMode);
 
+	//helper method
+	int FindIndexPlayerData(FString NickName);
+	bool CheckIndexPlayerIsOnScreen(int PLayerIndex)
 
 protected:
 

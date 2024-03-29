@@ -107,7 +107,9 @@ void UListContainerViewModel::OnTitleButtonPress()
 		break;
 
 	case ESlateVisibility::Hidden:
+		UpdatePlayerList();
 		SetListVisibilityStatus(ESlateVisibility::Visible);
+		DrawActiveScreen();
 		break;
 	}
 }
@@ -162,10 +164,6 @@ void UListContainerViewModel::DrawActiveScreen()
 		}
 		else
 		{
-			// we need to clear the player card
-			// need to add a binder to control visibility
-			UE_LOG(LogTemp, Warning, TEXT("agregando anuimacion descartar aca en indice %d"), IndexPlayerCardVM - TopIndexOnActivePage);
-
 			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->SetCardVisibilityStatus(ESlateVisibility::Hidden);
 		}
@@ -173,23 +171,49 @@ void UListContainerViewModel::DrawActiveScreen()
 	
 }
 
-void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, UEncapsulatePlayerData* PlayerData, EListMode CurrentMode)
+void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, UEncapsulatePlayerData* PlayerData, EListMode PlayerNewMode)
 {
 
-	DrawActiveScreen();
+	/* For debugging
+	*/
+	FString TextEnum = UEnum::GetValueAsString(PlayerNewMode);
+	FString ListModeEnum = UEnum::GetValueAsString(CurrentListMode);
+	UE_LOG(LogTemp, Warning, TEXT("enum en evento es: %s y este listado es: %s"), *TextEnum, *ListModeEnum);
+	/*
+	*/
 
-//	FString TextEnum = UEnum::GetValueAsString(CurrentMode);
-//	FString ListModeEnum = UEnum::GetValueAsString(CurrentListMode);
-//
-//	UE_LOG(LogTemp, Warning, TEXT("enum en evento es: %s y este listado es: %s"), *TextEnum, *ListModeEnum);
-//	if (CurrentMode == CurrentListMode)
-//	{
-//		// Add here some BP event for animation or delay?
-//
-//		DrawActiveScreen();
-//		return;
-//	}
-//
+	if (PlayerData == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Warning the player data is null we are not going to update the list"));
+		return;
+	}
+
+	// if the player has changed to this same list mode, it means we need to add the new player to the list
+	if (PlayerNewMode == CurrentListMode && FindIndexPlayerData(NickName) == -1)
+	{
+		ListPlayerData.Add(PlayerData);
+		DrawActiveScreen();
+		return;
+	}
+
+	// if the player has changed to the other mode, we need to check if it is in the list and remove it
+	if (PlayerNewMode != CurrentListMode)
+	{
+		int IndexPlayerOnList = FindIndexPlayerData(NickName);
+		if (IndexPlayerOnList != -1)
+		{
+			// we need to check if the index is on the current active screen
+
+			// if the player is looking the index
+				//make some animation/visual change
+
+				//Otherwise, just remove the intem and update
+
+			UE_LOG(LogTemp, Warning, TEXT("aqui we need to remove this user that exists"));
+		}
+	}
+
+}
 //
 //	for (UEncapsulatePlayerData* Data : ListPlayerData)
 //{
@@ -237,5 +261,18 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 //		DrawActiveScreen();
 //	}
 
-	
+
+int UListContainerViewModel::FindIndexPlayerData(FString NickName)
+{
+	int IndexNicknameOnList = ListPlayerData.IndexOfByPredicate([NickName](const UEncapsulatePlayerData* PlayerData)
+	{
+		return PlayerData->Nickname == NickName;
+	});
+
+	return IndexNicknameOnList;
+}
+
+bool UListContainerViewModel::CheckIndexPlayerIsOnScreen(int PLayerIndex)
+{
+
 }
