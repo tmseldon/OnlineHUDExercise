@@ -49,8 +49,11 @@ private:
 	void OnPlayerHasChangedEventHandler(FString NickName, class UEncapsulatePlayerData* PlayerData, EListMode CurrentMode);
 
 	//helper method
+	bool CheckIndexPlayerIsOnScreen(int PlayerIndex);
+	int GetCurrentTopIndex() const;
 	int FindIndexPlayerData(FString NickName);
-	bool CheckIndexPlayerIsOnScreen(int PLayerIndex)
+	void SafeRemovePlayerAtIndex(int PlayerIndex);
+
 
 protected:
 

@@ -114,11 +114,16 @@ void UListContainerViewModel::OnTitleButtonPress()
 	}
 }
 
+int UListContainerViewModel::GetCurrentTopIndex() const
+{
+	return CurrentActivePageValue * NumberCardsperScreen;
+}
+
 void UListContainerViewModel::DrawActiveScreen()
 {
 	// CurrentActivePage was updated and we call this method
 	// We calculate the top index player card
-	TopIndexOnActivePage = CurrentActivePageValue * NumberCardsperScreen;
+	TopIndexOnActivePage = GetCurrentTopIndex();
 	/*UE_LOG(LogTemp, Warning, TEXT("Top Index: %f"), CurrentActivePageValue);*/
 
 	//UpdatePlayerList();
@@ -133,7 +138,7 @@ void UListContainerViewModel::DrawActiveScreen()
 		if (CurrentActivePageValue > TotalPagesList)
 		{
 			CurrentActivePageValue = TotalPagesList;
-			TopIndexOnActivePage = CurrentActivePageValue * NumberCardsperScreen;
+			TopIndexOnActivePage = GetCurrentTopIndex();
 
 			UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
 		}
@@ -203,64 +208,34 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 		if (IndexPlayerOnList != -1)
 		{
 			// we need to check if the index is on the current active screen
-
-			// if the player is looking the index
+			if (CheckIndexPlayerIsOnScreen(IndexPlayerOnList))
+			{
+				// if the player is looking the index
 				//make some animation/visual change
+				int ViewModelIndex = IndexPlayerOnList % NumberCardsperScreen;
 
-				//Otherwise, just remove the intem and update
-
-			UE_LOG(LogTemp, Warning, TEXT("aqui we need to remove this user that exists"));
+				ListPlayersCardViewModels[ViewModelIndex]->SetNameField(FText::FromString(TEXT("este va ser eliminado")));
+				// This is just for Testing
+				FTimerHandle TimerHandler;
+				GetWorld()->GetTimerManager().SetTimer(
+					TimerHandler,
+					[this, ViewModelIndex, IndexPlayerOnList]()
+					{
+						SafeRemovePlayerAtIndex(IndexPlayerOnList);
+						DrawActiveScreen();
+					},
+					1.25f,
+					false);
+			}
+			else
+			{
+				SafeRemovePlayerAtIndex(IndexPlayerOnList);
+				DrawActiveScreen();
+			}
 		}
 	}
 
 }
-//
-//	for (UEncapsulatePlayerData* Data : ListPlayerData)
-//{
-//	FString Nick = Data->Nickname.ToString();
-//	UE_LOG(LogTemp, Warning, TEXT("Usuarios online: %s"), *Nick);
-//}
-//
-//
-//	int32 ListOldIndex = ListPlayerData.IndexOfByPredicate([NickName](const UEncapsulatePlayerData* PlayerData)
-//		{
-//			return PlayerData->Nickname == NickName;
-//		});
-//
-//
-//
-//
-//	// We need to determine if the player is seeing the screen where the player has changed of state
-//	// Otherwise, we just redraw
-//	float IndexOnPageNumber = FMath::DivideAndRoundDown(ListOldIndex, NumberCardsperScreen);
-//	UE_LOG(LogTemp, Warning, TEXT("el indice calculado del oldindex: %d y esta en la pagina: %f"), ListOldIndex, IndexOnPageNumber);
-//
-//	if (IndexOnPageNumber == CurrentActivePageValue)
-//	{
-//		//if that is the case, we need to create a animation or graphical effect on the player and
-//		//update the list
-//		int IndexCardViewModel = ListOldIndex % NumberCardsperScreen;
-//		UE_LOG(LogTemp, Warning, TEXT("El indice calculado para el VM que se tiene que ir es: %d"), IndexCardViewModel);
-//		
-//		// This is just for Testing
-//		FTimerHandle TimerHandler;
-//		GetWorld()->GetTimerManager().SetTimer(
-//			TimerHandler,
-//			[this, IndexCardViewModel]()
-//			{
-//				ListPlayersCardViewModels[IndexCardViewModel]
-//					->SetNameField(FText::FromString(TEXT("Esta card tiene que ser borrada")));
-//				DrawActiveScreen();
-//			},
-//			0.5f,
-//			false
-//		);
-//	}
-//	else
-//	{
-//		DrawActiveScreen();
-//	}
-
 
 int UListContainerViewModel::FindIndexPlayerData(FString NickName)
 {
@@ -272,7 +247,27 @@ int UListContainerViewModel::FindIndexPlayerData(FString NickName)
 	return IndexNicknameOnList;
 }
 
-bool UListContainerViewModel::CheckIndexPlayerIsOnScreen(int PLayerIndex)
+bool UListContainerViewModel::CheckIndexPlayerIsOnScreen(int PlayerIndex)
 {
+	int MinIndex = GetCurrentTopIndex();
+	int MaxIndex = MinIndex + NumberCardsperScreen - 1;
 
+	if (PlayerIndex >= MinIndex && PlayerIndex <= MaxIndex)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void UListContainerViewModel::SafeRemovePlayerAtIndex(int PlayerIndex)
+{
+	if (ListPlayerData.Num() == 1)
+	{
+		ListPlayerData.Reset();
+	}
+	else
+	{
+		ListPlayerData.RemoveAt(PlayerIndex);
+	}
 }
