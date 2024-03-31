@@ -33,10 +33,24 @@ protected:
 	FText GetNameField() const;
 	FText GetAliasField() const;
 
+private:
+
+	/*
+	/ Initialization parameters
+	*/
+
+	class AHUDManager* HudManager;
+
+	UFUNCTION()
+	void OnPlayerOnlineEventHandler(FString NickName, class UEncapsulatePlayerData* PlayerData, EListMode CurrentMode);
+
 public:
 	
 	UFUNCTION(BlueprintCallable)
-	void TriggerToastMessage(ESlateVisibility ToastVisibility, FString NamePlayer = "", FString AliasPlayer = "");
+	void InitializeViewModel(AHUDManager* HUDReference);
+
+	UFUNCTION(BlueprintCallable)
+	void TriggerToastMessage(ESlateVisibility ToastVisibility, class UEncapsulatePlayerData* PlayerData);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnToastAppear();

@@ -2,6 +2,9 @@
 
 
 #include "ToastMessageViewModel.h"
+#include "GameModeExtended.h"
+#include "HUDManager.h"
+#include "ListContainerViewModel.h"
 #include "Components/SlateWrapperTypes.h"
 
 FText UToastMessageViewModel::GetNameField() const
@@ -43,7 +46,7 @@ void UToastMessageViewModel::SetToastVisibilityStatus(ESlateVisibility NewStatus
 	}
 }
 
-void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibility, FString NamePlayer, FString AliasPlayer)
+void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibility, class UEncapsulatePlayerData* PlayerData)
 {
 	SetToastVisibilityStatus(ToastVisibility);
 
@@ -54,8 +57,8 @@ void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibilit
 	
 		break;
 	case ESlateVisibility::Visible:
-		SetNameField(FText::FromString(NamePlayer));
-		SetAliasField(FText::FromString(AliasPlayer));
+		SetNameField(FText::FromName(PlayerData->Name));
+		SetAliasField(FText::FromName(PlayerData->Nickname));
 		
 		FTimerHandle TimerHandler;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandler, [this]()
@@ -64,5 +67,25 @@ void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibilit
 			}, 2.5, false);
 
 		break;
+	}
+}
+
+void UToastMessageViewModel::InitializeViewModel(AHUDManager* HUDReference)
+{
+	if (HUDReference == nullptr)
+	{
+		return;
+	}
+
+	HudManager = HUDReference;
+	HudManager->OnPlayerHasChangedDataEvent.AddDynamic(this, &UToastMessageViewModel::OnPlayerOnlineEventHandler);
+	SetToastVisibilityStatus(ESlateVisibility::Hidden);
+}
+
+void UToastMessageViewModel::OnPlayerOnlineEventHandler(FString NickName, class UEncapsulatePlayerData* PlayerData, EListMode CurrentMode)
+{
+	if (CurrentMode == EListMode::Online)
+	{
+		TriggerToastMessage(ESlateVisibility::Visible, PlayerData);
 	}
 }
