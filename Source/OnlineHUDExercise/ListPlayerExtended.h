@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ListContainerViewModel.h"
 #include "Blueprint/UserWidget.h"
 #include "ListPlayerExtended.generated.h"
 
@@ -20,4 +21,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "List Params", meta = (AllowPrivateAccess = "true"))
 	int NumberOfCardsOnScreenForList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "List Params", meta = (AllowPrivateAccess = "true"))
+	EListMode TypeOfList;
 };
