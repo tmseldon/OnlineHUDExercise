@@ -97,4 +97,8 @@ public:
 	// Event for visibility
 	UFUNCTION(BlueprintCallable)
 	void OnTitleButtonPress();
+
+
+	UFUNCTION(BlueprintPure, FieldNotify)
+	bool CheckSliderEnable() const;
 };

@@ -94,8 +94,19 @@ void UListContainerViewModel::SetMaxPageValue(float NewValue)
 {
 	if (UE_MVVM_SET_PROPERTY_VALUE(MaxPageValue, NewValue))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("el numero de paginas es %f"), MaxPageValue);
 		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(MaxPageValue);
+		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CheckSliderEnable);
 	}
+}
+
+bool UListContainerViewModel::CheckSliderEnable() const
+{
+	if (MaxPageValue == 0)
+	{
+		return false;
+	}
+	return true;
 }
 
 void UListContainerViewModel::OnTitleButtonPress()
