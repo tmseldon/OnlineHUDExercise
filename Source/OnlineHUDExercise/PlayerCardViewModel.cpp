@@ -21,6 +21,11 @@ FText UPlayerCardViewModel::GetOnlineField() const
     return OnlineField;
 }
 
+FText UPlayerCardViewModel::GetLevelField() const
+{
+    return LevelField;
+}
+
 UTexture2D* UPlayerCardViewModel::GetProfileAvatar() const
 {
     return ProfileAvatar;
@@ -55,6 +60,14 @@ void UPlayerCardViewModel::SetOnlineField(FText NewText)
     }
 }
 
+void UPlayerCardViewModel::SetLevelField(FText NewText)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(LevelField, NewText))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(LevelField);
+    }
+}
+
 void UPlayerCardViewModel::SetProfileAvatar(UTexture2D* NewAvatar)
 {
     if (UE_MVVM_SET_PROPERTY_VALUE(ProfileAvatar, NewAvatar))
@@ -75,5 +88,10 @@ void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
 {
     SetNameField(FText::FromName(NewData->Name));
     SetAliasField(FText::FromName(NewData->Nickname));
-    SetProfileAvatar(NewData->ProfilePic);
+    SetLevelField(FText::FromString(LevelPrefix + FString::FromInt(NewData->Level)));
+
+    if (NewData->ProfilePic != nullptr)
+    {
+        SetProfileAvatar(NewData->ProfilePic);
+    }
 }

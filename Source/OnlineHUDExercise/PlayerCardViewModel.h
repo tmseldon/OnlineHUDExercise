@@ -16,6 +16,8 @@ class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase
 
 protected:
 
+	const FString LevelPrefix = TEXT("Level ");
+
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	ESlateVisibility CardVisibilityStatus;
 
@@ -29,6 +31,9 @@ protected:
 	FText OnlineField;
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText LevelField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	UTexture2D* ProfileAvatar;
 
 
@@ -37,12 +42,14 @@ public:
 	void SetNameField(FText NewText);
 	void SetAliasField(FText NewText);
 	void SetOnlineField(FText NewText);
+	void SetLevelField(FText NewText);
 	void SetProfileAvatar(UTexture2D* NewAvatar);
 	void SetCardVisibilityStatus(ESlateVisibility NewStatusList);
 
 	FText GetNameField() const;
 	FText GetAliasField() const;
 	FText GetOnlineField() const;
+	FText GetLevelField() const;
 	UTexture2D* GetProfileAvatar() const;
 	ESlateVisibility GetCardVisibilityStatus() const;
 
