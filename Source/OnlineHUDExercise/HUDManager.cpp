@@ -51,24 +51,10 @@ TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOffline()
 	return OfflinePlayerList;
 }
 
-
-void AHUDManager::TestingHUD()
-{
-	UE_LOG(LogTemp, Warning, TEXT("called from constructor VM here"));
-}
-
-
 void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, UEncapsulatePlayerData* PlayerData)
 {
 	OnReceivingPlayerData(FName(*NicknamePlayer), bOnlineStatus, PlayerData);
 	EListMode NewListMode = (bOnlineStatus == true) ? EListMode::Online : EListMode::Offline;
 
 	OnPlayerHasChangedDataEvent.Broadcast(NicknamePlayer, PlayerData, NewListMode);
-}
-
-//Nota HUD manager no deberia tener esta referencia, deberia ser al reves
-		// Esto para testeo por mientras
-void AHUDManager::SetToastVMReference(UToastMessageViewModel* ReferenceVM)
-{
-	NewToastVM = ReferenceVM;
 }

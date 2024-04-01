@@ -22,6 +22,11 @@ ESlateVisibility UToastMessageViewModel::GetToastVisibilityStatus() const
 	return ToastVisibilityStatus;
 }
 
+UTexture2D* UToastMessageViewModel::GetProfileAvatar() const
+{
+	return ProfileAvatar;
+}
+
 void UToastMessageViewModel::SetNameField(FText NewText)
 {
 	if (UE_MVVM_SET_PROPERTY_VALUE(NameField, NewText))
@@ -46,27 +51,11 @@ void UToastMessageViewModel::SetToastVisibilityStatus(ESlateVisibility NewStatus
 	}
 }
 
-void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibility, class UEncapsulatePlayerData* PlayerData)
+void UToastMessageViewModel::SetProfileAvatar(UTexture2D* NewAvatar)
 {
-	SetToastVisibilityStatus(ToastVisibility);
-
-	switch (ToastVisibility)
+	if (UE_MVVM_SET_PROPERTY_VALUE(ProfileAvatar, NewAvatar))
 	{
-	case ESlateVisibility::Hidden:
-		//Create a BlueprintEvent for animation here
-	
-		break;
-	case ESlateVisibility::Visible:
-		SetNameField(FText::FromName(PlayerData->Name));
-		SetAliasField(FText::FromName(PlayerData->Nickname));
-		
-		FTimerHandle TimerHandler;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandler, [this]()
-			{
-				SetToastVisibilityStatus(ESlateVisibility::Hidden);
-			}, 2.5, false);
-
-		break;
+		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(ProfileAvatar);
 	}
 }
 
@@ -87,5 +76,31 @@ void UToastMessageViewModel::OnPlayerOnlineEventHandler(FString NickName, class 
 	if (CurrentMode == EListMode::Online)
 	{
 		TriggerToastMessage(ESlateVisibility::Visible, PlayerData);
+	}
+}
+
+void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibility, class UEncapsulatePlayerData* PlayerData)
+{
+	SetToastVisibilityStatus(ToastVisibility);
+
+	switch (ToastVisibility)
+	{
+	case ESlateVisibility::Hidden:
+		//Create a BlueprintEvent for animation here
+
+		break;
+	case ESlateVisibility::Visible:
+		SetNameField(FText::FromName(PlayerData->Name));
+		SetAliasField(FText::FromName(PlayerData->Nickname));
+		SetProfileAvatar(PlayerData->ProfilePic);
+
+		//FTimerHandle TimerHandler;
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandler, [this]()
+		//	{
+		//		SetToastVisibilityStatus(ESlateVisibility::Hidden);
+		//	}, 2.5, false);
+		OnToastAppear(true);
+
+		break;
 	}
 }

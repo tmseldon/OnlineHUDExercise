@@ -3,25 +3,36 @@
 
 #include "PlayerCardViewModel.h"
 #include "GameModeExtended.h"
+#include "GameModeExtended.h"
+
+
+FText UPlayerCardViewModel::GetNameField() const
+{
+    return NameField;
+}
+
+FText UPlayerCardViewModel::GetAliasField() const
+{
+    return AliasField;
+}
+
+
+FText UPlayerCardViewModel::GetOnlineField() const
+{
+    return OnlineField;
+}
+
+UTexture2D* UPlayerCardViewModel::GetProfileAvatar() const
+{
+    return ProfileAvatar;
+}
+
 
 ESlateVisibility UPlayerCardViewModel::GetCardVisibilityStatus() const
 {
     return CardVisibilityStatus;
 }
 
-
-void UPlayerCardViewModel::SetCardVisibilityStatus(ESlateVisibility NewStatusList)
-{
-    if (UE_MVVM_SET_PROPERTY_VALUE(CardVisibilityStatus, NewStatusList))
-    {
-        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CardVisibilityStatus);
-    }
-}
-
-FText UPlayerCardViewModel::GetNameField() const
-{
-    return NameField;
-}
 
 void UPlayerCardViewModel::SetNameField(FText NewText)
 {
@@ -31,10 +42,6 @@ void UPlayerCardViewModel::SetNameField(FText NewText)
     }
 }
 
-FText UPlayerCardViewModel::GetAliasField() const
-{
-    return AliasField;
-}
 
 void UPlayerCardViewModel::SetAliasField(FText NewText)
 {
@@ -44,10 +51,6 @@ void UPlayerCardViewModel::SetAliasField(FText NewText)
     }
 }
 
-FText UPlayerCardViewModel::GetOnlineField() const
-{
-    return OnlineField;
-}
 
 void UPlayerCardViewModel::SetOnlineField(FText NewText)
 {
@@ -57,15 +60,27 @@ void UPlayerCardViewModel::SetOnlineField(FText NewText)
     }
 }
 
-void UPlayerCardViewModel::TestingMethod()
+void UPlayerCardViewModel::SetProfileAvatar(UTexture2D* NewAvatar)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Method call from through viewmodel"));
-    SetNameField(FText::FromString(TEXT("prueba")));
+    if (UE_MVVM_SET_PROPERTY_VALUE(ProfileAvatar, NewAvatar))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(ProfileAvatar);
+    }
 }
 
-//UPlayerCardViewModel::UPlayerCardViewModel()
-//{
-//    //SetAliasField(FText::FromString(TEXT("prueba constructor")));
-//    //UPlayerCardViewModel* ViewModelPointer = this;
-//    UE_LOG(LogTemp, Warning, TEXT("Estoy en el constructor del VM: %s"), *this->GetName());
-//}
+void UPlayerCardViewModel::SetCardVisibilityStatus(ESlateVisibility NewStatusList)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(CardVisibilityStatus, NewStatusList))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CardVisibilityStatus);
+    }
+}
+
+
+void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
+{
+    SetNameField(FText::FromName(NewData->Name));
+    SetAliasField(FText::FromName(NewData->Nickname));
+    SetProfileAvatar(NewData->ProfilePic);
+}
+

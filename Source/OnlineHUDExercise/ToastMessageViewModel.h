@@ -25,20 +25,24 @@ protected:
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText AliasField;
 
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	UTexture2D* ProfileAvatar;
+
 	void SetToastVisibilityStatus(ESlateVisibility NewStatusToast);
 	void SetNameField(FText NewText);
 	void SetAliasField(FText NewText);
+	void SetProfileAvatar(UTexture2D* NewAvatar);
 
 	ESlateVisibility GetToastVisibilityStatus() const;
 	FText GetNameField() const;
 	FText GetAliasField() const;
+	UTexture2D* GetProfileAvatar() const;
 
 private:
 
 	/*
 	/ Initialization parameters
 	*/
-
 	class AHUDManager* HudManager;
 
 	UFUNCTION()
@@ -53,6 +57,6 @@ public:
 	void TriggerToastMessage(ESlateVisibility ToastVisibility, class UEncapsulatePlayerData* PlayerData);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnToastAppear();
+	void OnToastAppear(bool bIsAppearing);
 	
 };

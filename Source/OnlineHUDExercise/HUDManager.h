@@ -20,25 +20,12 @@ class ONLINEHUDEXERCISE_API AHUDManager : public AHUD
 	
 private:
 
-	//Borrar este
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
-	int NumberPlayerCardVMOnPool = 3;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> OnlineScreenWidget;
 
-	//Borrar este
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UUserWidget> ListContainerWidget;
-
-	//Borrar este
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UUserWidget> PlayerCardWidget;
-
-	//Borrar este
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UUserWidget> ToastMessageWidget;
-
+	
 
 	// Reference for the Player Controller
 	APlayerController* CharacterController;
@@ -49,15 +36,6 @@ private:
 	//Lists of players with extra info
 	TArray<class UEncapsulatePlayerData*> OnlinePlayerList;
 	TArray<class UEncapsulatePlayerData*> OfflinePlayerList;
-
-
-
-	//Borrar este
-	class UToastMessageViewModel* NewToastVM;
-
-	//Borrar este
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Card Components", meta = (AllowPrivateAccess = "true"))
-	TArray<class UUserWidget*> ListSpawnedPlayerCardsWidgets;
 
 	// Delegate to listen changes on GameModeExtended
 	void OnChangeData(FString NicknamePlayer, bool bOnlineStatus, class UEncapsulatePlayerData* PlayerData);
@@ -76,15 +54,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPlayerDataChangesEvent OnPlayerHasChangedDataEvent;
 
-
-	//Borrar este
-	UFUNCTION(BlueprintCallable)
-	void SetToastVMReference(UToastMessageViewModel* ReferenceVM);
-
 	TArray<class UEncapsulatePlayerData*> GetUpdatedListOnline();
 	TArray<class UEncapsulatePlayerData*> GetUpdatedListOffline();
-
-	//Borrar este
-	void TestingHUD();
-
 };

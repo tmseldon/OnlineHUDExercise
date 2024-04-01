@@ -134,11 +134,11 @@ void UListContainerViewModel::DrawActiveScreen()
 		float TotalPagesList = FMath::DivideAndRoundUp(ListPlayerData.Num(), NumberCardsperScreen) - 1;
 		
 		// If the number of pages is reduced, and we are in a page that will disappear, 
-		// better to force the list go to the new last page (for safety)
+		// better to force the list go to the first page (for safety)
 		if (CurrentActivePageValue > TotalPagesList)
 		{
-			CurrentActivePageValue = TotalPagesList;
-			TopIndexOnActivePage = GetCurrentTopIndex();
+			CurrentActivePageValue = 0;
+			TopIndexOnActivePage = 0;
 
 			UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
 		}
@@ -163,9 +163,7 @@ void UListContainerViewModel::DrawActiveScreen()
 			}
 
 			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
-				->SetNameField(FText::FromName(ListPlayerData[IndexPlayerCardVM]->Name));
-			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
-				->SetAliasField(FText::FromName(ListPlayerData[IndexPlayerCardVM]->Nickname));
+				->AddDataIntoCard(ListPlayerData[IndexPlayerCardVM]);
 		}
 		else
 		{

@@ -28,26 +28,24 @@ protected:
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText OnlineField;
 
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	UTexture2D* ProfileAvatar;
+
 
 public:
 
 	void SetNameField(FText NewText);
 	void SetAliasField(FText NewText);
 	void SetOnlineField(FText NewText);
-
-
+	void SetProfileAvatar(UTexture2D* NewAvatar);
 
 	FText GetNameField() const;
 	FText GetAliasField() const;
 	FText GetOnlineField() const;
-
+	UTexture2D* GetProfileAvatar() const;
 
 	ESlateVisibility GetCardVisibilityStatus() const;
 	void SetCardVisibilityStatus(ESlateVisibility NewStatusList);
 
-
-	void TestingMethod();
-
-	//UPlayerCardViewModel();
-	
+	void AddDataIntoCard(class UEncapsulatePlayerData* NewData);
 };
