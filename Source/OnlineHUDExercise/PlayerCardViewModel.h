@@ -38,14 +38,13 @@ public:
 	void SetAliasField(FText NewText);
 	void SetOnlineField(FText NewText);
 	void SetProfileAvatar(UTexture2D* NewAvatar);
+	void SetCardVisibilityStatus(ESlateVisibility NewStatusList);
 
 	FText GetNameField() const;
 	FText GetAliasField() const;
 	FText GetOnlineField() const;
 	UTexture2D* GetProfileAvatar() const;
-
 	ESlateVisibility GetCardVisibilityStatus() const;
-	void SetCardVisibilityStatus(ESlateVisibility NewStatusList);
 
 	void AddDataIntoCard(class UEncapsulatePlayerData* NewData);
 };

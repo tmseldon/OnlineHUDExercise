@@ -171,7 +171,6 @@ void UListContainerViewModel::DrawActiveScreen()
 				->SetCardVisibilityStatus(ESlateVisibility::Hidden);
 		}
 	}
-	
 }
 
 void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, UEncapsulatePlayerData* PlayerData, EListMode PlayerNewMode)
@@ -194,7 +193,7 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 	// if the player has changed to this same list mode, it means we need to add the new player to the list
 	if (PlayerNewMode == CurrentListMode && FindIndexPlayerData(NickName) == -1)
 	{
-		ListPlayerData.Add(PlayerData);
+		ListPlayerData.Insert(PlayerData, 0);
 		DrawActiveScreen();
 		return;
 	}

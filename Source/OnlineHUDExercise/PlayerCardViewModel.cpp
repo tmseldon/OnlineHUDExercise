@@ -16,7 +16,6 @@ FText UPlayerCardViewModel::GetAliasField() const
     return AliasField;
 }
 
-
 FText UPlayerCardViewModel::GetOnlineField() const
 {
     return OnlineField;
@@ -27,12 +26,10 @@ UTexture2D* UPlayerCardViewModel::GetProfileAvatar() const
     return ProfileAvatar;
 }
 
-
 ESlateVisibility UPlayerCardViewModel::GetCardVisibilityStatus() const
 {
     return CardVisibilityStatus;
 }
-
 
 void UPlayerCardViewModel::SetNameField(FText NewText)
 {
@@ -42,7 +39,6 @@ void UPlayerCardViewModel::SetNameField(FText NewText)
     }
 }
 
-
 void UPlayerCardViewModel::SetAliasField(FText NewText)
 {
     if (UE_MVVM_SET_PROPERTY_VALUE(AliasField, NewText))
@@ -50,7 +46,6 @@ void UPlayerCardViewModel::SetAliasField(FText NewText)
         UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(AliasField);
     }
 }
-
 
 void UPlayerCardViewModel::SetOnlineField(FText NewText)
 {
@@ -76,11 +71,9 @@ void UPlayerCardViewModel::SetCardVisibilityStatus(ESlateVisibility NewStatusLis
     }
 }
 
-
 void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
 {
     SetNameField(FText::FromName(NewData->Name));
     SetAliasField(FText::FromName(NewData->Nickname));
     SetProfileAvatar(NewData->ProfilePic);
 }
-
