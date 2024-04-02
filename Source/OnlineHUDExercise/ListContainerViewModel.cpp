@@ -4,6 +4,7 @@
 #include "ListContainerViewModel.h"
 #include "GameModeExtended.h"
 #include "HUDManager.h"
+#include "PlayerCardExtended.h"
 #include "PlayerCardViewModel.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/SlateWrapperTypes.h"
@@ -43,7 +44,7 @@ void UListContainerViewModel::UpdatePlayerList()
 
 void UListContainerViewModel::AddCardPlayerReferencesToList(
 	UPlayerCardViewModel* NewPlayerCardVM, 
-	UUserWidget* NewPlayerCardWidget)
+	UPlayerCardExtended* NewPlayerCardWidget)
 {
 	if (NewPlayerCardVM == nullptr || NewPlayerCardWidget == nullptr)
 	{

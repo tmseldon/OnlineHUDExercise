@@ -35,7 +35,7 @@ private:
 	TArray<class UPlayerCardViewModel*> ListPlayersCardViewModels;
 
 	// References with the Player Card Widgets on the List
-	TMap<class UPlayerCardViewModel*, class UUserWidget*> MapPlayersCards;
+	TMap<class UPlayerCardViewModel*, class UPlayerCardExtended*> MapPlayersCards;
 
 	UPROPERTY()
 	TArray<class UEncapsulatePlayerData*> ListPlayerData;
@@ -75,7 +75,7 @@ public:
 
 	// View Models Player Cards
 	UFUNCTION(BlueprintCallable)
-	void AddCardPlayerReferencesToList(UPlayerCardViewModel* NewPlayerCardVM, UUserWidget* NewPlayerCardWidget);
+	void AddCardPlayerReferencesToList(UPlayerCardViewModel* NewPlayerCardVM, UPlayerCardExtended* NewPlayerCardWidget);
 
 
 	// Bind properties methods for Slider
