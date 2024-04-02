@@ -5,12 +5,9 @@
 #include "OnlineHUDExerciseCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
+/*
 
-UEncapsulatePlayerData::UEncapsulatePlayerData()
-{
-	
-}
-
+*/
 void UEncapsulatePlayerData::HydratePlayerDataModel(FPlayerProfileData& InitialData)
 {
 	Name = InitialData.Name;
@@ -19,22 +16,26 @@ void UEncapsulatePlayerData::HydratePlayerDataModel(FPlayerProfileData& InitialD
 	ProfilePic = InitialData.ProfilePic;
 	LastSeen = InitialData.LastSeen;
 	bIsOnline = InitialData.bIsOnline;
+	BioInfo = InitialData.BioText;
 }
 
-void UEncapsulatePlayerData::HydratePlayerDataModel(UEncapsulatePlayerData& UpdatedData, bool bUpdateTimeConnection)
+void UEncapsulatePlayerData::UpdatePlayerDataModelTime(bool bUpdateTimeReConnection)
 {
-	Name = UpdatedData.Name;
-	Nickname = UpdatedData.Nickname;
-	Level = UpdatedData.Level;
-	ProfilePic = UpdatedData.ProfilePic;
-	LastSeen = UpdatedData.LastSeen;
-	bIsOnline = UpdatedData.bIsOnline;
-
-	if (bUpdateTimeConnection)
+	if (bUpdateTimeReConnection)
 	{
-		RecentChangeConnection = FDateTime::Now();
+		RecentConnection = FDateTime::Now();
+	}
+	else
+	{
+		LastSeen = FDateTime::Now();
 	}
 }
+
+
+/*
+
+
+*/
 
 
 //Copying this constructor from the generated code for the Third Person View Template from Unreal
@@ -96,6 +97,7 @@ void AGameModeExtended::CreateInitialModel()
 
 			if (PlayerData->bIsOnline)
 			{
+				DataEncapsulated->UpdatePlayerDataModelTime(true);
 				PlayersOnline.Add(DataEncapsulated);
 			}
 			else
@@ -135,6 +137,7 @@ void AGameModeExtended::StartStatusChangeSimulation()
 		{
 			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOffline.Num() - 1);
 			PlayersOffline[ChangeStatusPlayerIndex]->bIsOnline = true;
+			PlayersOffline[ChangeStatusPlayerIndex]->UpdatePlayerDataModelTime(true);
 
 			NicknameChangeStatus = PlayersOffline[ChangeStatusPlayerIndex]->Nickname.ToString();
 			bChangedStatus = PlayersOffline[ChangeStatusPlayerIndex]->bIsOnline;
@@ -165,14 +168,15 @@ void AGameModeExtended::StartStatusChangeSimulation()
 		{
 			ChangeStatusPlayerIndex = FMath::RandRange(0, PlayersOnline.Num() - 1);
 			PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline = false;
+			PlayersOnline[ChangeStatusPlayerIndex]->UpdatePlayerDataModelTime(false);
 
 			NicknameChangeStatus = PlayersOnline[ChangeStatusPlayerIndex]->Nickname.ToString();
 			bChangedStatus = PlayersOnline[ChangeStatusPlayerIndex]->bIsOnline;
 
 			//// Debugging
-			UE_LOG(LogTemp, Warning, TEXT("*****************"));
-			UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
-				*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
+			//UE_LOG(LogTemp, Warning, TEXT("*****************"));
+			//UE_LOG(LogTemp, Warning, TEXT("Cambio de usuario: %s al status %s"),
+			//	*NicknameChangeStatus, bChangedStatus ? TEXT("a ONLINE") : TEXT("a OFFLINE"));
 
 			PlayersOffline.Add(PlayersOnline[ChangeStatusPlayerIndex]);
 			PlayerData = PlayersOnline[ChangeStatusPlayerIndex];

@@ -16,7 +16,7 @@ FText UPlayerCardViewModel::GetAliasField() const
     return AliasField;
 }
 
-FText UPlayerCardViewModel::GetOnlineField() const
+bool UPlayerCardViewModel::GetOnlineField() const
 {
     return OnlineField;
 }
@@ -36,6 +36,20 @@ ESlateVisibility UPlayerCardViewModel::GetCardVisibilityStatus() const
     return CardVisibilityStatus;
 }
 
+
+FText UPlayerCardViewModel::GetLastSeenField() const
+{
+    return LastSeenField;
+}
+
+void UPlayerCardViewModel::SetLastSeenField(FText NewText)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(LastSeenField, NewText))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(LastSeenField);
+    }
+}
+
 void UPlayerCardViewModel::SetNameField(FText NewText)
 {
     if (UE_MVVM_SET_PROPERTY_VALUE(NameField, NewText))
@@ -52,9 +66,9 @@ void UPlayerCardViewModel::SetAliasField(FText NewText)
     }
 }
 
-void UPlayerCardViewModel::SetOnlineField(FText NewText)
+void UPlayerCardViewModel::SetOnlineField(bool bNewState)
 {
-    if (UE_MVVM_SET_PROPERTY_VALUE(OnlineField, NewText))
+    if (UE_MVVM_SET_PROPERTY_VALUE(OnlineField, bNewState))
     {
         UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(OnlineField);
     }
@@ -86,12 +100,18 @@ void UPlayerCardViewModel::SetCardVisibilityStatus(ESlateVisibility NewStatusLis
 
 void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
 {
-    SetNameField(FText::FromName(NewData->Name));
     SetAliasField(FText::FromName(NewData->Nickname));
+    SetNameField(FText::FromName(NewData->Name));
     SetLevelField(FText::FromString(LevelPrefix + FString::FromInt(NewData->Level)));
+    SetOnlineField(NewData->bIsOnline);
 
     if (NewData->ProfilePic != nullptr)
     {
         SetProfileAvatar(NewData->ProfilePic);
+    }
+
+    if (!NewData->bIsOnline)
+    {        
+        SetLastSeenField(FText::FromString(LastSeenOfflineText + NewData->LastSeen.ToFormattedString(TEXT(" %H:%M:%S %d %b '%y"))));
     }
 }

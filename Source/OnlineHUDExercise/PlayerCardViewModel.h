@@ -17,6 +17,7 @@ class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase
 private:
 
 	const FString LevelPrefix = TEXT("Level ");
+	const FString LastSeenOfflineText = TEXT("Last seen:");
 
 protected:
 
@@ -30,10 +31,13 @@ protected:
 	FText AliasField;
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	FText OnlineField;
+	bool OnlineField;
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FText LevelField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText LastSeenField;
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	UTexture2D* ProfileAvatar;
@@ -47,8 +51,8 @@ public:
 	void SetAliasField(FText NewText);
 	FText GetAliasField() const;
 
-	void SetOnlineField(FText NewText);
-	FText GetOnlineField() const;
+	void SetOnlineField(bool bNewState);
+	bool GetOnlineField() const;
 
 	void SetLevelField(FText NewText);
 	FText GetLevelField() const;
@@ -58,6 +62,10 @@ public:
 
 	void SetCardVisibilityStatus(ESlateVisibility NewStatusList);
 	ESlateVisibility GetCardVisibilityStatus() const;
+
+	void SetLastSeenField(FText NewText);
+	FText GetLastSeenField() const;
+
 
 	void AddDataIntoCard(class UEncapsulatePlayerData* NewData);
 };

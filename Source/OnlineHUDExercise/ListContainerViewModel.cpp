@@ -204,7 +204,15 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 	// if the player has changed to this same list mode, it means we need to add the new player to the list
 	if (PlayerNewMode == CurrentListMode && FindIndexPlayerData(NickName) == -1)
 	{
-		ListPlayerData.Insert(PlayerData, 0);
+		if (PlayerNewMode == EListMode::Online)
+		{
+			ListPlayerData.Insert(PlayerData, 0);
+		}
+		else
+		{
+			ListPlayerData.Add(PlayerData);
+		}
+		
 		DrawActiveScreen();
 		return;
 	}

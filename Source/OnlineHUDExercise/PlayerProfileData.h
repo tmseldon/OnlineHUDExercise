@@ -35,4 +35,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerData)
 	bool bIsOnline;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerData)
+	FText BioText;
 };

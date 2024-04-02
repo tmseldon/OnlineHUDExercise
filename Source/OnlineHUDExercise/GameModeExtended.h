@@ -29,16 +29,17 @@ public:
 	FDateTime LastSeen;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerData)
-	FDateTime RecentChangeConnection;
+	FDateTime RecentConnection;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerData)
 	bool bIsOnline;
 
-	UEncapsulatePlayerData();
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerData)
+	FText BioInfo;
 
 	void HydratePlayerDataModel(struct FPlayerProfileData& InitialData);
 
-	void HydratePlayerDataModel(UEncapsulatePlayerData& UpdatedData, bool bUpdateTimeConnection = false);
+	void UpdatePlayerDataModelTime(bool bUpdateTimeReConnection);
 };
 
 
