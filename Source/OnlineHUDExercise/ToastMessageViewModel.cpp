@@ -83,24 +83,11 @@ void UToastMessageViewModel::TriggerToastMessage(ESlateVisibility ToastVisibilit
 {
 	SetToastVisibilityStatus(ToastVisibility);
 
-	switch (ToastVisibility)
+	// On BP we use the On Visbility Event to detect the visible case and add animations/effects + delay
+	if (ToastVisibility == ESlateVisibility::Visible)
 	{
-	case ESlateVisibility::Hidden:
-		//Create a BlueprintEvent for animation here
-
-		break;
-	case ESlateVisibility::Visible:
 		SetNameField(FText::FromName(PlayerData->Name));
 		SetAliasField(FText::FromName(PlayerData->Nickname));
 		SetProfileAvatar(PlayerData->ProfilePic);
-
-		//FTimerHandle TimerHandler;
-		//GetWorld()->GetTimerManager().SetTimer(TimerHandler, [this]()
-		//	{
-		//		SetToastVisibilityStatus(ESlateVisibility::Hidden);
-		//	}, 2.5, false);
-		OnToastAppear(true);
-
-		break;
 	}
 }
