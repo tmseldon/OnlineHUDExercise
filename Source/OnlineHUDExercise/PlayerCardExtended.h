@@ -14,9 +14,17 @@ class ONLINEHUDEXERCISE_API UPlayerCardExtended : public UUserWidget
 {
 	GENERATED_BODY()
 
+private:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Parent Reference", meta = (AllowPrivateAccess = "true"))
+	UListContainerViewModel* ListContainerParent;
+
 public:
 
+	UFUNCTION(BlueprintCallable)
+	void InitDependency(UListContainerViewModel* ParentReference);
+
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnPlayerAppearingOnlineFX();
+	void OnPlayerAppearingOnlineFX(int IndexPlayer);
 	
 };

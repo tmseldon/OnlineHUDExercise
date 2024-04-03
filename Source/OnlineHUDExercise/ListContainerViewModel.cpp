@@ -230,19 +230,23 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 				// if the player is looking the index
 				//make some animation/visual change
 				int ViewModelIndex = IndexPlayerOnList % NumberCardsperScreen;
+				UPlayerCardViewModel* CurrentVM = ListPlayersCardViewModels[ViewModelIndex];
 
-				ListPlayersCardViewModels[ViewModelIndex]->SetNameField(FText::FromString(TEXT("este va ser eliminado")));
-				// This is just for Testing
-				FTimerHandle TimerHandler;
-				GetWorld()->GetTimerManager().SetTimer(
-					TimerHandler,
-					[this, ViewModelIndex, IndexPlayerOnList]()
-					{
-						SafeRemovePlayerAtIndex(IndexPlayerOnList);
-						DrawActiveScreen();
-					},
-					1.25f,
-					false);
+				CurrentVM->SetNameField(FText::FromString(TEXT("este va ser eliminado")));
+				UPlayerCardExtended* CurrentWidget = MapPlayersCards[CurrentVM];
+				CurrentWidget->OnPlayerAppearingOnlineFX(IndexPlayerOnList);
+
+				//// This is just for Testing
+				//FTimerHandle TimerHandler;
+				//GetWorld()->GetTimerManager().SetTimer(
+				//	TimerHandler,
+				//	[this, ViewModelIndex, IndexPlayerOnList]()
+				//	{
+				//		SafeRemovePlayerAtIndex(IndexPlayerOnList);
+				//		DrawActiveScreen();
+				//	},
+				//	1.25f,
+				//	false);
 			}
 			else
 			{
@@ -252,6 +256,13 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 		}
 	}
 
+}
+
+void UListContainerViewModel::CallbackAnimation(int IndexPlayer)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Callback was called"));
+	SafeRemovePlayerAtIndex(IndexPlayer);
+	DrawActiveScreen();
 }
 
 int UListContainerViewModel::FindIndexPlayerData(FString NickName)

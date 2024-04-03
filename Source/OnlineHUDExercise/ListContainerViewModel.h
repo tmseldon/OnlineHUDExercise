@@ -73,6 +73,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitializeViewModel(AHUDManager* HUDReference, EListMode Mode, int NumberCards);
 
+	UFUNCTION(BlueprintCallable)
+	void CallbackAnimation(int IndexPlayer);
+
 	// View Models Player Cards
 	UFUNCTION(BlueprintCallable)
 	void AddCardPlayerReferencesToList(UPlayerCardViewModel* NewPlayerCardVM, UPlayerCardExtended* NewPlayerCardWidget);
@@ -101,4 +104,5 @@ public:
 
 	UFUNCTION(BlueprintPure, FieldNotify)
 	bool CheckSliderEnable() const;
+
 };
