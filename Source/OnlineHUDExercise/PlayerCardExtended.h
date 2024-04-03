@@ -6,6 +6,15 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerCardExtended.generated.h"
 
+UENUM(BlueprintType)
+enum class EPlayerCardAnim : uint8
+{
+	Disconnected,
+	Online,
+	FadeOut,
+	FadeIn
+};
+
 /**
  * 
  */
@@ -25,6 +34,6 @@ public:
 	void InitDependency(UListContainerViewModel* ParentReference);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnPlayerAppearingOnlineFX(int IndexPlayer);
+	void TriggerFXOnPlayerCard(int IndexPlayer, EPlayerCardAnim TypeAnimation);
 	
 };

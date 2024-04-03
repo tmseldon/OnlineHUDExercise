@@ -103,7 +103,7 @@ void UListContainerViewModel::SetMaxPageValue(float NewValue)
 
 bool UListContainerViewModel::CheckSliderEnable() const
 {
-	if (MaxPageValue == 0)
+	if (MaxPageValue <= 0)
 	{
 		return false;
 	}
@@ -207,6 +207,12 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 	{
 		if (PlayerNewMode == EListMode::Online)
 		{
+			if (CurrentActivePageValue == 0)
+			{
+				UPlayerCardViewModel* CurrentVM = ListPlayersCardViewModels[0];
+				UPlayerCardExtended* CurrentWidget = MapPlayersCards[CurrentVM];
+				CurrentWidget->TriggerFXOnPlayerCard(-1, EPlayerCardAnim::Online);
+			}
 			ListPlayerData.Insert(PlayerData, 0);
 		}
 		else
@@ -231,22 +237,16 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 				//make some animation/visual change
 				int ViewModelIndex = IndexPlayerOnList % NumberCardsperScreen;
 				UPlayerCardViewModel* CurrentVM = ListPlayersCardViewModels[ViewModelIndex];
-
-				CurrentVM->SetNameField(FText::FromString(TEXT("este va ser eliminado")));
 				UPlayerCardExtended* CurrentWidget = MapPlayersCards[CurrentVM];
-				CurrentWidget->OnPlayerAppearingOnlineFX(IndexPlayerOnList);
 
-				//// This is just for Testing
-				//FTimerHandle TimerHandler;
-				//GetWorld()->GetTimerManager().SetTimer(
-				//	TimerHandler,
-				//	[this, ViewModelIndex, IndexPlayerOnList]()
-				//	{
-				//		SafeRemovePlayerAtIndex(IndexPlayerOnList);
-				//		DrawActiveScreen();
-				//	},
-				//	1.25f,
-				//	false);
+				if (CurrentListMode == EListMode::Online)
+				{
+					CurrentWidget->TriggerFXOnPlayerCard(IndexPlayerOnList, EPlayerCardAnim::Disconnected);
+				}
+				else
+				{
+					CurrentWidget->TriggerFXOnPlayerCard(IndexPlayerOnList, EPlayerCardAnim::FadeOut);
+				}
 			}
 			else
 			{
@@ -260,7 +260,6 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 
 void UListContainerViewModel::CallbackAnimation(int IndexPlayer)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Callback was called"));
 	SafeRemovePlayerAtIndex(IndexPlayer);
 	DrawActiveScreen();
 }
