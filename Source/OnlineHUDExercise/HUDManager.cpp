@@ -18,9 +18,15 @@ void AHUDManager::BeginPlay()
 	GameModeExtendedService = Cast<AGameModeExtended>(GetWorld()->GetAuthGameMode());
 	if (GameModeExtendedService != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HUD MANAGER iniciado!!"));
+		UE_LOG(LogTemp, Warning, TEXT("HUD MANAGER initiated!!"));
 		GameModeExtendedService->OnPlayerDataHasChanged.BindUObject(this, &AHUDManager::OnChangeData);
 		CreatePlayerStatusLists();
+	}
+
+	CharacterController = this->GetOwningPlayerController();
+	if (CharacterController == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CharacterController is null, there is a problem trying to get the reference at HUD"))
 	}
 
 	Super::BeginPlay();
@@ -57,4 +63,45 @@ void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, UEnca
 	EListMode NewListMode = (bOnlineStatus == true) ? EListMode::Online : EListMode::Offline;
 
 	OnPlayerHasChangedDataEvent.Broadcast(NicknamePlayer, PlayerData, NewListMode);
+}
+
+void AHUDManager::CallPlayerOnlineStatusScreen()
+{
+	UE_LOG(LogTemp, Warning, TEXT("aqui Hud llamado"));
+
+	if (OnlineScreenSpawnedWidget == nullptr)
+	{
+		OnlineScreenSpawnedWidget = CreateWidget(
+			CharacterController,
+			OnlineScreenWidget,
+			FName(TEXT("Player Online Status Screen"))
+		);
+
+		if (OnlineScreenSpawnedWidget != nullptr)
+		{
+			OnlineScreenSpawnedWidget->AddToViewport();
+			CharacterController->SetInputMode(FInputModeUIOnly());
+			CharacterController->bShowMouseCursor = true;
+		}
+	}
+	else
+	{
+		auto Testing = OnlineScreenSpawnedWidget->GetVisibility();
+		switch (Testing)
+		{
+		case ESlateVisibility::Hidden:
+		case ESlateVisibility::Collapsed:
+			OnlineScreenSpawnedWidget->SetVisibility(ESlateVisibility::Visible);
+			CharacterController->SetInputMode(FInputModeUIOnly());
+			CharacterController->bShowMouseCursor = true;
+			break;
+
+		case ESlateVisibility::Visible:
+		default:
+			OnlineScreenSpawnedWidget->SetVisibility(ESlateVisibility::Hidden);
+			CharacterController->SetInputMode(FInputModeGameOnly());
+			CharacterController->bShowMouseCursor = false;
+			break;
+		}
+	}
 }

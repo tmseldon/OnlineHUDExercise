@@ -44,6 +44,14 @@ class AOnlineHUDExerciseCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Menu Open/Close Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MenuAction;
+
+
+	class AHUDManager* HUDManagerReference;
+
+
 public:
 	AOnlineHUDExerciseCharacter();
 	
@@ -55,6 +63,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void OnlineMenu();
 			
 
 protected:

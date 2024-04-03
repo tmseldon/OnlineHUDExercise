@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "HUDManager.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -66,7 +67,13 @@ void AOnlineHUDExerciseCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+
+		if (AHUD* HudReference = PlayerController->GetHUD())
+		{
+			HUDManagerReference = Cast<AHUDManager>(HudReference);
+		}	
 	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -86,6 +93,9 @@ void AOnlineHUDExerciseCharacter::SetupPlayerInputComponent(UInputComponent* Pla
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AOnlineHUDExerciseCharacter::Look);
+		
+		//Open/Close Menu
+		EnhancedInputComponent->BindAction(MenuAction, ETriggerEvent::Started, this, &AOnlineHUDExerciseCharacter::OnlineMenu);
 	}
 	else
 	{
@@ -127,4 +137,14 @@ void AOnlineHUDExerciseCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AOnlineHUDExerciseCharacter::OnlineMenu()
+{
+	if (HUDManagerReference == nullptr)
+	{
+		return;
+	}
+
+	HUDManagerReference->CallPlayerOnlineStatusScreen();
 }

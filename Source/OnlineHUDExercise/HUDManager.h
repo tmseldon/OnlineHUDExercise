@@ -25,7 +25,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Online Screen Components", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> OnlineScreenWidget;
 
-	
+	UUserWidget* OnlineScreenSpawnedWidget;
 
 	// Reference for the Player Controller
 	APlayerController* CharacterController;
@@ -56,4 +56,7 @@ public:
 
 	TArray<class UEncapsulatePlayerData*> GetUpdatedListOnline();
 	TArray<class UEncapsulatePlayerData*> GetUpdatedListOffline();
+
+	UFUNCTION(BlueprintCallable)
+	void CallPlayerOnlineStatusScreen();
 };
