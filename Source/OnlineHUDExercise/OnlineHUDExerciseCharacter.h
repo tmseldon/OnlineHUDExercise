@@ -48,7 +48,10 @@ class AOnlineHUDExerciseCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MenuAction;
 
-
+	/*
+		Reference for the HUD Manager
+		We use this one in order to trigger the callback for showing the Online Status menu
+	*/
 	class AHUDManager* HUDManagerReference;
 
 

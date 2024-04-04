@@ -19,6 +19,10 @@ private:
 	const FString LevelPrefix = TEXT("Level ");
 	const FString LastSeenOfflineText = TEXT("Last seen:");
 
+	class UTooltipViewModel* TooltipViewModel;
+
+	FText BioText;
+
 protected:
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
@@ -41,6 +45,9 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	UTexture2D* ProfileAvatar;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	bool bHasPlayerCardAnyHover;
 
 
 public:
@@ -66,6 +73,10 @@ public:
 	void SetLastSeenField(FText NewText);
 	FText GetLastSeenField() const;
 
+	void SetbHasPlayerCardAnyHover(bool NewValue);
+	bool GetbHasPlayerCardAnyHover() const;
 
 	void AddDataIntoCard(class UEncapsulatePlayerData* NewData);
+
+	void SetTooltipVMReference(class UTooltipViewModel* TooltipVM);
 };

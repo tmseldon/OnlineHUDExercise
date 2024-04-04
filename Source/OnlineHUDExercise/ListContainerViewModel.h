@@ -74,6 +74,9 @@ public:
 	void InitializeViewModel(AHUDManager* HUDReference, EListMode Mode, int NumberCards);
 
 	UFUNCTION(BlueprintCallable)
+	void InjectTooltipViewModelToCards(class UTooltipViewModel* TooltipVM);
+
+	UFUNCTION(BlueprintCallable)
 	void CallbackAnimation(int IndexPlayer);
 
 	// View Models Player Cards
@@ -104,5 +107,7 @@ public:
 
 	UFUNCTION(BlueprintPure, FieldNotify)
 	bool CheckSliderEnable() const;
+
+
 
 };

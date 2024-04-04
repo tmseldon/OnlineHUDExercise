@@ -67,8 +67,6 @@ void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, UEnca
 
 void AHUDManager::CallPlayerOnlineStatusScreen()
 {
-	UE_LOG(LogTemp, Warning, TEXT("aqui Hud llamado"));
-
 	if (OnlineScreenSpawnedWidget == nullptr)
 	{
 		OnlineScreenSpawnedWidget = CreateWidget(

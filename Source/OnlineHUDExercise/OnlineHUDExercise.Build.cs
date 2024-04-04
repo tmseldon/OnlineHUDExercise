@@ -16,9 +16,11 @@ public class OnlineHUDExercise : ModuleRules
 			"EnhancedInput", 
 			"UMG", 
 			"Json", 
-			"JsonUtilities", 
+			"JsonUtilities",
 			"StructUtils",
             "FieldNotification",
         });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
     }
 }

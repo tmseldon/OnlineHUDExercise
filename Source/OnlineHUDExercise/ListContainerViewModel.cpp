@@ -6,6 +6,7 @@
 #include "HUDManager.h"
 #include "PlayerCardExtended.h"
 #include "PlayerCardViewModel.h"
+#include "TooltipViewModel.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/SlateWrapperTypes.h"
 #include "Kismet/GameplayStatics.h"
@@ -296,5 +297,16 @@ void UListContainerViewModel::SafeRemovePlayerAtIndex(int PlayerIndex)
 	else
 	{
 		ListPlayerData.RemoveAt(PlayerIndex);
+	}
+}
+
+void UListContainerViewModel::InjectTooltipViewModelToCards(UTooltipViewModel* TooltipVM)
+{
+	for (UPlayerCardViewModel* PlayerCard : ListPlayersCardViewModels)
+	{
+		if (PlayerCard != nullptr)
+		{
+			PlayerCard->SetTooltipVMReference(TooltipVM);
+		}
 	}
 }

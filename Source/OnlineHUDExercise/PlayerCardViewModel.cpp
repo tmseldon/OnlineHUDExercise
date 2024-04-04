@@ -3,7 +3,7 @@
 
 #include "PlayerCardViewModel.h"
 #include "GameModeExtended.h"
-#include "GameModeExtended.h"
+#include "TooltipViewModel.h"
 
 
 FText UPlayerCardViewModel::GetNameField() const
@@ -41,6 +41,33 @@ FText UPlayerCardViewModel::GetLastSeenField() const
 {
     return LastSeenField;
 }
+
+bool UPlayerCardViewModel::GetbHasPlayerCardAnyHover() const
+{
+    return bHasPlayerCardAnyHover;
+}
+
+void UPlayerCardViewModel::SetbHasPlayerCardAnyHover(bool NewValue)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(bHasPlayerCardAnyHover, NewValue))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(bHasPlayerCardAnyHover);
+        if (bHasPlayerCardAnyHover)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Fui focuseado"));
+
+            TooltipViewModel->InjectDataAndTrigger(true, BioText);
+
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Me quitaron el focuseado"));
+            TooltipViewModel->InjectDataAndTrigger(false, BioText);
+        }
+    }
+}
+
+
 
 void UPlayerCardViewModel::SetLastSeenField(FText NewText)
 {
@@ -98,6 +125,12 @@ void UPlayerCardViewModel::SetCardVisibilityStatus(ESlateVisibility NewStatusLis
     }
 }
 
+void UPlayerCardViewModel::SetTooltipVMReference(class UTooltipViewModel* TooltipVM)
+{
+    TooltipViewModel = TooltipVM;
+}
+
+
 void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
 {
     SetAliasField(FText::FromName(NewData->Nickname));
@@ -114,4 +147,6 @@ void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
     {        
         SetLastSeenField(FText::FromString(LastSeenOfflineText + NewData->LastSeen.ToFormattedString(TEXT(" %H:%M:%S %d %b '%y"))));
     }
+
+    BioText = NewData->BioInfo;
 }

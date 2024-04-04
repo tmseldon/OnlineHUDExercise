@@ -16,9 +16,7 @@ class ONLINEHUDEXERCISE_API UListPlayerExtended : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UVerticalBox* ListContainer;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "List Params", meta = (AllowPrivateAccess = "true"))
 	int NumberOfCardsOnScreenForList;
 
