@@ -19,8 +19,8 @@ public class OnlineHUDExercise : ModuleRules
 			"JsonUtilities",
 			"StructUtils",
             "FieldNotification",
+            "Slate", 
+			"SlateCore",
         });
-
-        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
     }
 }

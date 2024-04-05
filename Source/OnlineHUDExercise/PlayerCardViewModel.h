@@ -14,42 +14,6 @@ class ONLINEHUDEXERCISE_API UPlayerCardViewModel : public UMVVMViewModelBase
 {
 	GENERATED_BODY()
 
-private:
-
-	const FString LevelPrefix = TEXT("Level ");
-	const FString LastSeenOfflineText = TEXT("Last seen:");
-
-	class UTooltipViewModel* TooltipViewModel;
-
-	FText BioText;
-
-protected:
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	ESlateVisibility CardVisibilityStatus;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	FText NameField;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	FText AliasField;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	bool OnlineField;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	FText LevelField;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	FText LastSeenField;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	UTexture2D* ProfileAvatar;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	bool bHasPlayerCardAnyHover;
-
-
 public:
 
 	void SetNameField(FText NewText);
@@ -58,8 +22,8 @@ public:
 	void SetAliasField(FText NewText);
 	FText GetAliasField() const;
 
-	void SetOnlineField(bool bNewState);
-	bool GetOnlineField() const;
+	void SetbOnlineField(bool bNewState);
+	bool GetbOnlineField() const;
 
 	void SetLevelField(FText NewText);
 	FText GetLevelField() const;
@@ -76,7 +40,58 @@ public:
 	void SetbHasPlayerCardAnyHover(bool NewValue);
 	bool GetbHasPlayerCardAnyHover() const;
 
+	void SetWidgetViewPortPos(FVector2D NewValue);
+	FVector2D GetWidgetViewPortPos() const;
+
+	void SetWidgetViewPortSize(FVector2D NewValue);
+	FVector2D GetWidgetViewPortSize() const;
+
 	void AddDataIntoCard(class UEncapsulatePlayerData* NewData);
 
 	void SetTooltipVMReference(class UTooltipViewModel* TooltipVM);
+
+
+protected:
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	ESlateVisibility CardVisibilityStatus;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText NameField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText AliasField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	bool bOnlineField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText LevelField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText LastSeenField;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	UTexture2D* ProfileAvatar;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	bool bHasPlayerCardAnyHover;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FVector2D WidgetViewPortPos;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FVector2D WidgetViewPortSize;
+
+
+private:
+
+	const FString LevelPrefix = TEXT("Level ");
+	const FString LastSeenOfflineText = TEXT("Last seen:");
+
+	class UTooltipViewModel* TooltipViewModel;
+
+	FText BioText;
+	FDateTime TimeforTooltip;
+
 };

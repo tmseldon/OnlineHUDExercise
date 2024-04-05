@@ -14,22 +14,45 @@ class ONLINEHUDEXERCISE_API UTooltipViewModel : public UMVVMViewModelBase
 {
 	GENERATED_BODY()
 
-protected:
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	ESlateVisibility TooltipVisibilityStatus;
-
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
-	FText BioText;
-
 public:
 
 	FText GetBioText() const;
 	void SetBioText(FText NewText);
 
-	ESlateVisibility GetTooltipVisibilityStatus() const;
-	void SetTooltipVisibilityStatus(ESlateVisibility NewStatus);
+	FText GetDateInfo() const;
+	void SetDateInfo(FText NewText);
 
-	void InjectDataAndTrigger(bool bIsShown, FText ProfileText);
+	bool GetTooltipVisibilityStatus() const;
+	void SetTooltipVisibilityStatus(bool NewStatus);
+
+	void InjectDataAndTrigger(
+		bool bIsShown,
+		bool bIsOnline,
+		FVector2D SpawnPos, 
+		FVector2D SpawnSize, 
+		FText ProfileText, 
+		FDateTime TimeForTooltip);
+
+	UFUNCTION(BlueprintCallable)
+	void InitializeDependencies(class UTooltipExtended* ParentWidget);
+
+protected:
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	bool TooltipVisibilityStatus;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText BioText;
+
+	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
+	FText DateInfo;
+
+private:
+
+	const FString BioPrefix = TEXT("Bio: ");
+	const FString MinutesOnlineText = TEXT("Minutes online: ");
+	const FString MinutesOfflineText = TEXT("Minutes offline: ");
+
+	class UTooltipExtended* TooltipParentWidget;
 	
 };

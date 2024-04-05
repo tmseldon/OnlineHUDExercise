@@ -16,9 +16,9 @@ FText UPlayerCardViewModel::GetAliasField() const
     return AliasField;
 }
 
-bool UPlayerCardViewModel::GetOnlineField() const
+bool UPlayerCardViewModel::GetbOnlineField() const
 {
-    return OnlineField;
+    return bOnlineField;
 }
 
 FText UPlayerCardViewModel::GetLevelField() const
@@ -47,27 +47,62 @@ bool UPlayerCardViewModel::GetbHasPlayerCardAnyHover() const
     return bHasPlayerCardAnyHover;
 }
 
+FVector2D UPlayerCardViewModel::GetWidgetViewPortPos() const
+{
+    return WidgetViewPortPos;
+}
+
+FVector2D UPlayerCardViewModel::GetWidgetViewPortSize() const
+{
+    return WidgetViewPortSize;
+}
+
+void UPlayerCardViewModel::SetWidgetViewPortSize(FVector2D NewValue)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(WidgetViewPortSize, NewValue))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(WidgetViewPortSize);
+    }
+}
+
+void UPlayerCardViewModel::SetWidgetViewPortPos(FVector2D NewValue)
+{
+    if (UE_MVVM_SET_PROPERTY_VALUE(WidgetViewPortPos, NewValue))
+    {
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(WidgetViewPortPos);
+    }
+}
+
+
 void UPlayerCardViewModel::SetbHasPlayerCardAnyHover(bool NewValue)
 {
     if (UE_MVVM_SET_PROPERTY_VALUE(bHasPlayerCardAnyHover, NewValue))
     {
         UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(bHasPlayerCardAnyHover);
+
+        // If we are hovering the Card PLayer, we send the data required for the Tooltip View Model
         if (bHasPlayerCardAnyHover)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Fui focuseado"));
-
-            TooltipViewModel->InjectDataAndTrigger(true, BioText);
-
+            TooltipViewModel->InjectDataAndTrigger(
+                true, 
+                bOnlineField, 
+                WidgetViewPortPos, 
+                WidgetViewPortSize, 
+                BioText, 
+                TimeforTooltip);
         }
         else
         {
-            UE_LOG(LogTemp, Warning, TEXT("Me quitaron el focuseado"));
-            TooltipViewModel->InjectDataAndTrigger(false, BioText);
+            TooltipViewModel->InjectDataAndTrigger(
+                false, 
+                bOnlineField, 
+                WidgetViewPortPos, 
+                WidgetViewPortSize, 
+                BioText, 
+                TimeforTooltip);
         }
     }
 }
-
-
 
 void UPlayerCardViewModel::SetLastSeenField(FText NewText)
 {
@@ -93,11 +128,11 @@ void UPlayerCardViewModel::SetAliasField(FText NewText)
     }
 }
 
-void UPlayerCardViewModel::SetOnlineField(bool bNewState)
+void UPlayerCardViewModel::SetbOnlineField(bool bNewState)
 {
-    if (UE_MVVM_SET_PROPERTY_VALUE(OnlineField, bNewState))
+    if (UE_MVVM_SET_PROPERTY_VALUE(bOnlineField, bNewState))
     {
-        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(OnlineField);
+        UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(bOnlineField);
     }
 }
 
@@ -136,7 +171,8 @@ void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
     SetAliasField(FText::FromName(NewData->Nickname));
     SetNameField(FText::FromName(NewData->Name));
     SetLevelField(FText::FromString(LevelPrefix + FString::FromInt(NewData->Level)));
-    SetOnlineField(NewData->bIsOnline);
+    SetbOnlineField(NewData->bIsOnline);
+    BioText = NewData->BioInfo;
 
     if (NewData->ProfilePic != nullptr)
     {
@@ -146,7 +182,10 @@ void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
     if (!NewData->bIsOnline)
     {        
         SetLastSeenField(FText::FromString(LastSeenOfflineText + NewData->LastSeen.ToFormattedString(TEXT(" %H:%M:%S %d %b '%y"))));
+        TimeforTooltip = NewData->LastSeen;
     }
-
-    BioText = NewData->BioInfo;
+    else
+    {
+        TimeforTooltip = NewData->RecentConnection;
+    }
 }

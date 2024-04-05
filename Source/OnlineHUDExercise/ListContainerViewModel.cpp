@@ -256,7 +256,6 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 			}
 		}
 	}
-
 }
 
 void UListContainerViewModel::CallbackAnimation(int IndexPlayer)
