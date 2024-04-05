@@ -24,7 +24,7 @@ void UListContainerViewModel::InitializeViewModel(AHUDManager* HUDReference, ELi
 	NumberCardsperScreen = NumberCards;
 	UpdatePlayerList();
 
-	UE_LOG(LogTemp, Warning, TEXT("el tamaño del listado es: %d"), ListPlayerData.Num());
+	UE_LOG(LogTemp, Warning, TEXT("The size of the initial Player List data is on this ListContainer is: %d"), ListPlayerData.Num());
 
 	/*HudManager->OnPlayerHasChangedDataEvent.RemoveDynamic(this, &UListContainerViewModel::OnPlayerHasChangedEventHandler);*/
 	HudManager->OnPlayerHasChangedDataEvent.AddDynamic(this, &UListContainerViewModel::OnPlayerHasChangedEventHandler);
@@ -52,11 +52,10 @@ void UListContainerViewModel::AddCardPlayerReferencesToList(
 		return;
 	}
 
+	//We build both list of the PLayer Cards View Models and a Map to set the relationship
+	// between View Models and theirs parent Widgets
 	ListPlayersCardViewModels.Add(NewPlayerCardVM);
 	MapPlayersCards.Add(NewPlayerCardVM, NewPlayerCardWidget);
-
-	//UE_LOG(LogTemp, Warning, TEXT("Checking ListPlayerCardsVM: %d same as MaxPerScreen: %d"),
-	//	ListPlayersCardViewModels.Num(), NumberCardsperScreen);
 }
 
 ESlateVisibility UListContainerViewModel::GetListVisibilityStatus() const
@@ -83,6 +82,8 @@ void UListContainerViewModel::SetCurrentActivePageValue(float NewValue)
 	if (UE_MVVM_SET_PROPERTY_VALUE(CurrentActivePageValue, NewValue))
 	{
 		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
+
+		//Every time we detect a change on the slider => new page on the list, we need to redraw
 		DrawActiveScreen();
 	}
 }
@@ -96,7 +97,10 @@ void UListContainerViewModel::SetMaxPageValue(float NewValue)
 {
 	if (UE_MVVM_SET_PROPERTY_VALUE(MaxPageValue, NewValue))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("el numero de paginas es %f"), MaxPageValue);
+		/*UE_LOG(LogTemp, Warning, TEXT("the max number of pages are now %f"), MaxPageValue);*/
+
+		//We don't only notify a change on the max number of pages, but also check if we need
+		//to disable the slider when the pages are equal or less than 0
 		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(MaxPageValue);
 		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CheckSliderEnable);
 	}
@@ -137,9 +141,6 @@ void UListContainerViewModel::DrawActiveScreen()
 	// CurrentActivePage was updated and we call this method
 	// We calculate the top index player card
 	TopIndexOnActivePage = GetCurrentTopIndex();
-	/*UE_LOG(LogTemp, Warning, TEXT("Top Index: %f"), CurrentActivePageValue);*/
-
-	//UpdatePlayerList();
 
 	// Recalculate the max amount of pages just in case
 	if (NumberCardsperScreen > 0)
@@ -156,30 +157,36 @@ void UListContainerViewModel::DrawActiveScreen()
 			UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(CurrentActivePageValue);
 		}
 
-		/*UE_LOG(LogTemp, Warning, TEXT("Totla pages: %f"), TotalPagesList);*/
-
+		// We set the new value of total pages based in changes on the ListPlayerData
 		SetMaxPageValue(TotalPagesList);
 	}
+
+	// Here we redraw all the Player Cards Widgets. Since the Player Card widgets are fixed in quantity, 
+	// we need to determne which section of the complete list of players are we showing here
 
 	for (int IndexPlayerCardVM = TopIndexOnActivePage; 
 		IndexPlayerCardVM < NumberCardsperScreen + TopIndexOnActivePage;
 		IndexPlayerCardVM++)
 	{
+		// If we found valid information on the position of the list
+		// we show the player card (if it was hidden) and add the required data
 		if (ListPlayerData.IsValidIndex(IndexPlayerCardVM))
 		{
+			// Checking visbility of the widget
 			if (ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->GetCardVisibilityStatus() == ESlateVisibility::Hidden)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("agregando anuimacion visible aca en indice %d"), IndexPlayerCardVM - TopIndexOnActivePage);
 				ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 					->SetCardVisibilityStatus(ESlateVisibility::Visible);
 			}
 
+			// Adding information to the Player Card View Model
 			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->AddDataIntoCard(ListPlayerData[IndexPlayerCardVM]);
 		}
 		else
 		{
+			// Case where there is no more information to add, we hide the Player Card Widget
 			ListPlayersCardViewModels[IndexPlayerCardVM - TopIndexOnActivePage]
 				->SetCardVisibilityStatus(ESlateVisibility::Hidden);
 		}
@@ -191,9 +198,9 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 
 	/* For debugging
 	*/
-	FString TextEnum = UEnum::GetValueAsString(PlayerNewMode);
-	FString ListModeEnum = UEnum::GetValueAsString(CurrentListMode);
-	UE_LOG(LogTemp, Warning, TEXT("enum en evento es: %s y este listado es: %s"), *TextEnum, *ListModeEnum);
+	//FString TextEnum = UEnum::GetValueAsString(PlayerNewMode);
+	//FString ListModeEnum = UEnum::GetValueAsString(CurrentListMode);
+	//UE_LOG(LogTemp, Warning, TEXT("enum en evento es: %s y este listado es: %s"), *TextEnum, *ListModeEnum);
 	/*
 	*/
 
@@ -208,16 +215,23 @@ void UListContainerViewModel::OnPlayerHasChangedEventHandler(FString NickName, U
 	{
 		if (PlayerNewMode == EListMode::Online)
 		{
+			// If we are looking at the initial page on the online list
+			// we need to prepare the first Player Card widget for some animations
+			// We always add the most recent person connected on the top of the list
 			if (CurrentActivePageValue == 0)
 			{
 				UPlayerCardViewModel* CurrentVM = ListPlayersCardViewModels[0];
 				UPlayerCardExtended* CurrentWidget = MapPlayersCards[CurrentVM];
 				CurrentWidget->TriggerFXOnPlayerCard(-1, EPlayerCardAnim::Online);
 			}
+
+			// If we were not in the first page or we have already started the animation, 
+			// we add the new information on the top pf the list
 			ListPlayerData.Insert(PlayerData, 0);
 		}
 		else
 		{
+			// CAse offline, we just add the new player information at the end of the list
 			ListPlayerData.Add(PlayerData);
 		}
 		
