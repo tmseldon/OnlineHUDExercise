@@ -57,18 +57,24 @@ void UTooltipViewModel::InjectDataAndTrigger(
 	FText ProfileText, 
 	FDateTime TimeForTooltip)
 {
+	// If we need to show the tooltip we start to gather all the info to show
 	if (bIsShown)
 	{
-		FString CompleteBioText = BioPrefix + ProfileText.ToString();
-
 		SetTooltipVisibilityStatus(true);
+
+		// Profile bio text
+		FString CompleteBioText = BioPrefix + ProfileText.ToString();
 		SetBioText(FText::FromString(CompleteBioText));
 
+		// We set the position on the viewport with an offset
 		if (TooltipParentWidget != nullptr)
 		{
 			UCanvasPanelSlot* WidgetSlot = Cast<UCanvasPanelSlot>(TooltipParentWidget->Slot);
 			WidgetSlot->SetPosition(SpawnPos + FVector2D(165, 0));
 		}
+
+		// We calculate the minutes being online or disconnected and we show the final text
+		// depending of the case
 
 		FTimespan DifferenceMinutes = FDateTime::Now() - TimeForTooltip;
 		float Minutes = (float)DifferenceMinutes.GetTotalMinutes();
@@ -87,6 +93,7 @@ void UTooltipViewModel::InjectDataAndTrigger(
 	}
 	else
 	{
+		// We just hide the tooltip
 		SetTooltipVisibilityStatus(false);
 	}
 }

@@ -7,7 +7,8 @@
 #include "TooltipViewModel.generated.h"
 
 /**
- * 
+ * This is the view model that controls and sets everything related to the tooltip
+ * that appears on the top of the player cards
  */
 UCLASS()
 class ONLINEHUDEXERCISE_API UTooltipViewModel : public UMVVMViewModelBase
@@ -16,6 +17,9 @@ class ONLINEHUDEXERCISE_API UTooltipViewModel : public UMVVMViewModelBase
 
 public:
 
+	/*
+	* Getter and setters for the Bind properties
+	*/
 	FText GetBioText() const;
 	void SetBioText(FText NewText);
 
@@ -25,6 +29,13 @@ public:
 	bool GetTooltipVisibilityStatus() const;
 	void SetTooltipVisibilityStatus(bool NewStatus);
 
+	// The initialization method where we get the reference for the Widget Parent of this View Model
+	// We need this reference to modify its position on the Viewport
+	UFUNCTION(BlueprintCallable)
+	void InitializeDependencies(class UTooltipExtended* ParentWidget);
+
+	// This is the main methid where we inject the required data from the Player Card View Model
+	// Also, we set the visibility here
 	void InjectDataAndTrigger(
 		bool bIsShown,
 		bool bIsOnline,
@@ -33,10 +44,11 @@ public:
 		FText ProfileText, 
 		FDateTime TimeForTooltip);
 
-	UFUNCTION(BlueprintCallable)
-	void InitializeDependencies(class UTooltipExtended* ParentWidget);
-
 protected:
+
+	/*
+	* Bind properties
+	*/
 
 	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter)
 	bool TooltipVisibilityStatus;
@@ -49,10 +61,13 @@ protected:
 
 private:
 
+	/*
+	* String constant to builds the final texts on the Tooltip
+	*/
 	const FString BioPrefix = TEXT("Bio: ");
 	const FString MinutesOnlineText = TEXT("Minutes online: ");
 	const FString MinutesOfflineText = TEXT("Minutes offline: ");
 
+	// Reference of the parent widget
 	class UTooltipExtended* TooltipParentWidget;
-	
 };

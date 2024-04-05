@@ -7,7 +7,8 @@
 #include "PlayerProfileData.generated.h"
 
 /**
- * 
+ * This is the structure of the information on the FTableRow
+ * It holds the initial information from players
  */
 
 USTRUCT(BlueprintType)

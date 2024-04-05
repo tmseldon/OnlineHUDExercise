@@ -6,12 +6,21 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameModeExtended.generated.h"
 
+/*
+* This class is the model that we use to encapsulate all the player's information
+* All the data from the initial TableRow is populated here, and any changes during
+* the game will be saved here
+*/
 UCLASS()
 class ONLINEHUDEXERCISE_API UEncapsulatePlayerData : public UObject
 {
 	GENERATED_BODY()
 
 public:
+
+	/*
+	* Properties
+	*/
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PlayerData)
 	FName Name;
@@ -37,23 +46,43 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerData)
 	FText BioInfo;
 
+	// We populate the initial data here
 	void HydratePlayerDataModel(struct FPlayerProfileData& InitialData);
 
+	// We update the changes related to time with connection and disconnection cases
 	void UpdatePlayerDataModelTime(bool bUpdateTimeReConnection);
 };
 
 
-
 /**
- * 
+ * We use this extension of GameMode to emulate the connection and disconnection of players
+ * HUD Manager gets the information from player by some delegates
  */
+
+//Indicates when the model is ready
 DECLARE_DELEGATE(FOnModelCreated);
+
+//Indicates when there are some player's data changes
 DECLARE_DELEGATE_ThreeParams(FOnPlayerStatusChanged, FString, bool, UEncapsulatePlayerData*);
 
 UCLASS()
 class ONLINEHUDEXERCISE_API AGameModeExtended : public AGameModeBase
 {
 	GENERATED_BODY()
+
+
+public:
+
+	AGameModeExtended();
+
+	FOnModelCreated OnPlayerDataModelHydrated;
+	FOnPlayerStatusChanged OnPlayerDataHasChanged;
+
+	UFUNCTION()
+	TArray<UEncapsulatePlayerData*> GetOnlinePlayers() const;
+
+	UFUNCTION()
+	TArray<UEncapsulatePlayerData*> GetOfflinePlayers() const;
 
 protected:
 
@@ -66,7 +95,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection Simulation", meta = (AllowPrivateAccess = "true"))
 	bool bIsTurnOnSimulation = true;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connection Simulation", meta = (AllowPrivateAccess = "true"))
 	int ChangeConnectionRangeSecondsMin = 5;
@@ -83,24 +111,6 @@ private:
 	FTimerHandle ChangingStatusTimerHandle;
 
 	void CreateInitialModel();
-
 	void StartStatusChangeSimulation();
-
 	int GetRandomTimeChangeStatus();
-
-
-public:
-
-	AGameModeExtended();
-
-	
-	FOnModelCreated OnPlayerDataModelHydrated;
-	FOnPlayerStatusChanged OnPlayerDataHasChanged;
-
-
-	UFUNCTION()
-	TArray<UEncapsulatePlayerData*> GetOnlinePlayers() const;
-
-	UFUNCTION()
-	TArray<UEncapsulatePlayerData*> GetOfflinePlayers() const;
 };

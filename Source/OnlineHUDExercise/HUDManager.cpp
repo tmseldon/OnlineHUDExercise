@@ -14,6 +14,7 @@ void AHUDManager::BeginPlay()
 {
 
 	//Initialize before execute the BluePrint part of this method
+	//We get all the important dependencies here
 
 	GameModeExtendedService = Cast<AGameModeExtended>(GetWorld()->GetAuthGameMode());
 	if (GameModeExtendedService != nullptr)
@@ -37,23 +38,21 @@ void AHUDManager::CreatePlayerStatusLists()
 	OnlinePlayerList = GameModeExtendedService->GetOnlinePlayers();
 	OfflinePlayerList = GameModeExtendedService->GetOfflinePlayers();
 
-	UE_LOG(LogTemp, Warning, TEXT("el tamanyoo del listado online ne HUD es: %d"), OnlinePlayerList.Num());
-	UE_LOG(LogTemp, Warning, TEXT("el tamanyoo del listado offline ne HUD es: %d"), OfflinePlayerList.Num());
+	UE_LOG(LogTemp, Warning, TEXT("The size for the online is on the HUD is: %d"), OnlinePlayerList.Num());
+	UE_LOG(LogTemp, Warning, TEXT("The size for the offline is on the HUD is: %d"), OfflinePlayerList.Num());
 }
 
 TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOnline()
 {
 	OnlinePlayerList = GameModeExtendedService->GetOnlinePlayers();
-	//need to add extra info here before returning list
-	UE_LOG(LogTemp, Warning, TEXT("REtornando el tamanyoo del listado online ne HUD es: %d"), OnlinePlayerList.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Returning he size for the online is on the HUD is: %d"), OnlinePlayerList.Num());
 	return OnlinePlayerList;
 }
 
 TArray<UEncapsulatePlayerData*> AHUDManager::GetUpdatedListOffline()
 {
 	OfflinePlayerList = GameModeExtendedService->GetOfflinePlayers();
-	//need to add extra info here before returning list
-	UE_LOG(LogTemp, Warning, TEXT("REtornando el tamanyoo del listado offline ne HUD es: %d"), OfflinePlayerList.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Returning the size for the offline is on the HUD is: %d"), OfflinePlayerList.Num());
 	return OfflinePlayerList;
 }
 
@@ -67,6 +66,7 @@ void AHUDManager::OnChangeData(FString NicknamePlayer, bool bOnlineStatus, UEnca
 
 void AHUDManager::CallPlayerOnlineStatusScreen()
 {
+	// If the online menu has not been created, we start the widget here
 	if (OnlineScreenSpawnedWidget == nullptr)
 	{
 		OnlineScreenSpawnedWidget = CreateWidget(
@@ -84,8 +84,11 @@ void AHUDManager::CallPlayerOnlineStatusScreen()
 	}
 	else
 	{
-		auto Testing = OnlineScreenSpawnedWidget->GetVisibility();
-		switch (Testing)
+		// Here we switched between Visible and Hidden if the menu online widget has been created
+		// We set the input mode accordingly to the UI or Gameplay
+		// NOTE: added additional cases for future testing
+		ESlateVisibility CurrentVisbility = OnlineScreenSpawnedWidget->GetVisibility();
+		switch (CurrentVisbility)
 		{
 		case ESlateVisibility::Hidden:
 		case ESlateVisibility::Collapsed:

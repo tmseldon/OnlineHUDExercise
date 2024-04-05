@@ -80,7 +80,7 @@ void UPlayerCardViewModel::SetbHasPlayerCardAnyHover(bool NewValue)
     {
         UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(bHasPlayerCardAnyHover);
 
-        // If we are hovering the Card PLayer, we send the data required for the Tooltip View Model
+        // If we are hovering the Card Player, we send the data required for the Tooltip View Model
         if (bHasPlayerCardAnyHover)
         {
             TooltipViewModel->InjectDataAndTrigger(
@@ -168,17 +168,19 @@ void UPlayerCardViewModel::SetTooltipVMReference(class UTooltipViewModel* Toolti
 
 void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
 {
+    // We set all the info relevant for the Player Card Widget
     SetAliasField(FText::FromName(NewData->Nickname));
     SetNameField(FText::FromName(NewData->Name));
     SetLevelField(FText::FromString(LevelPrefix + FString::FromInt(NewData->Level)));
     SetbOnlineField(NewData->bIsOnline);
-    BioText = NewData->BioInfo;
 
     if (NewData->ProfilePic != nullptr)
     {
         SetProfileAvatar(NewData->ProfilePic);
     }
 
+    // Depending on the online/disconnected status we show some additional information
+    // We also asign the values for the information for the tooltip
     if (!NewData->bIsOnline)
     {        
         SetLastSeenField(FText::FromString(LastSeenOfflineText + NewData->LastSeen.ToFormattedString(TEXT(" %H:%M:%S %d %b '%y"))));
@@ -188,4 +190,6 @@ void UPlayerCardViewModel::AddDataIntoCard(UEncapsulatePlayerData* NewData)
     {
         TimeforTooltip = NewData->RecentConnection;
     }
+
+    BioText = NewData->BioInfo;
 }

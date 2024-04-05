@@ -6,7 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 
 /*
-
+* Methods related to the model, here we hydrate and update the time's connections
 */
 void UEncapsulatePlayerData::HydratePlayerDataModel(FPlayerProfileData& InitialData)
 {
@@ -33,10 +33,9 @@ void UEncapsulatePlayerData::UpdatePlayerDataModelTime(bool bUpdateTimeReConnect
 
 
 /*
-
-
+* Methods related to the Game Mode, most of them are related to the simulation of players
+* connecting and disconnecting
 */
-
 
 //Copying this constructor from the generated code for the Third Person View Template from Unreal
 AGameModeExtended::AGameModeExtended()
@@ -67,9 +66,8 @@ void AGameModeExtended::BeginPlay()
 
 	float InitialRandomTime = GetRandomTimeChangeStatus();
 
-	UE_LOG(LogTemp, Warning, TEXT("primer intervalo de tiempo es: %f"), InitialRandomTime);
+	UE_LOG(LogTemp, Warning, TEXT("The interval for changes on connection is: %f"), InitialRandomTime);
 
-	//Remove comments, putting like this for testing list
 	if (bIsTurnOnSimulation)
 	{
 		GetWorldTimerManager().SetTimer(
@@ -107,9 +105,10 @@ void AGameModeExtended::CreateInitialModel()
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Cantidad de jugadores offline: %d"), PlayersOffline.Num());
-	UE_LOG(LogTemp, Warning, TEXT("Cantidad de jugadores online: %d"), PlayersOnline.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Number of initial players offline: %d"), PlayersOffline.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Number of initial players online: %d"), PlayersOnline.Num());
 
+	// We inform that we have the initial model created
 	OnPlayerDataModelHydrated.ExecuteIfBound();
 }
 
